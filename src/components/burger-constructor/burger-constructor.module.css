@@ -1,5 +1,5 @@
 .constructor{
-    max-width: 600px;
+    max-width: 700px;
     padding-top: 100px;
     position:relative;
     max-height: calc(100vh - 100px);
@@ -7,15 +7,15 @@
 
 .ul{
    overflow-y: scroll;
+   list-style-type: none;
    max-height: calc(100vh - 410px);
    gap: 10px;
    margin: 0px;
+   padding-left: 0px;
 }
 
-.li::marker{
-    content: '::';
-    color: aliceblue;
-    font-size: 2em;
+.li:not(:last-child) {
+   margin-bottom: 10px;
 }
 
 .order{
@@ -40,4 +40,11 @@
 .bottom{
     margin-left: 35px;
     bottom: 60px;
+}
+
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0px 16px 60px 16px;
 }

@@ -70,3 +70,7 @@ max-height: calc(100vh - 100px);
 .text {
     text-align: center;
 }
+
+.flex{
+    display: flex;
+}
