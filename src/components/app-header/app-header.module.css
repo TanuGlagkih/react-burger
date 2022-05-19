@@ -1,0 +1,38 @@
+.header {
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+    }
+
+.elem {
+    display: flex; 
+    align-items: center;
+    margin: 16px 8px 16px 8px;
+    padding: 20px;
+}
+
+.logo {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.icon {
+    margin-right: 8px;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 1080px) {
+   .logo {
+    all: unset;
+   }
+}
+@media (min-width: 1600px){
+    .header{
+    justify-content: space-around;
+   }
+}
