@@ -36,7 +36,7 @@ const Item = (props) => {
 }
 
 Item.propTypes = {
-  data:
+ item:
     PropTypes.arrayOf(ingredientType.isRequired).isRequired
 };
 
