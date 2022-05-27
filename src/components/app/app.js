@@ -12,7 +12,12 @@ function App() {
   useEffect(() => {
     const getData = () => {
       fetch(url)
-        .then(res => res.json())
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(res.status);
+        })
         .then(data => setState({ ...state, products: data.data }))
         .catch(e => {
           setState({ ...state, hasError: true });

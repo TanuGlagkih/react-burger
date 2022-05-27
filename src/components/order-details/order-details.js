@@ -17,6 +17,7 @@ const OrderDetails = ({ active }) => {
 
 OrderDetails.propTypes = {
     active: PropTypes.bool,
+    setActive: PropTypes.func,
 }
 
 export default OrderDetails;

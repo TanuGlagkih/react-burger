@@ -10,7 +10,7 @@ const MainPartOfBurger = (props) => {
   return (
     <ul className={styles.ul}>
       {props.items.filter(item => item.type === 'sauce' || item.type === 'main').map(item => (
-        <li className={styles.li}>
+        <li className={styles.li} key={item._id}>
           <DragIcon type="primary" />
           <ConstructorElement
             text={item.name}
@@ -33,6 +33,7 @@ const BunTop = (props) => {
           text={`${item.name} (верх)`}
           price={item.price}
           thumbnail={item.image}
+          key={item._id}
         />
       ))}
     </div>
@@ -49,6 +50,7 @@ const BunBottom = (props) => {
           text={`${item.name} (низ)`}
           price={item.price}
           thumbnail={item.image}
+          key={item._id}
         />
       ))}
     </div>
@@ -56,10 +58,10 @@ const BunBottom = (props) => {
 }
 
 const OrderElement = (props) => {
-  const [active, setActive] = useState({ active: false });
+  const [active, setActive] = useState(false);
 
   const click = () => {
-    setActive({ active: true })
+    setActive(true)
   }
 
   return (

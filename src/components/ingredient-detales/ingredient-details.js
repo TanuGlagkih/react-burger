@@ -26,8 +26,8 @@ const IngredientDetails = ({ active, item }) => {
 }
 
 IngredientDetails.propTypes = {
+    active: PropTypes.bool,
     item: PropTypes.object,
-    active: PropTypes.bool
 }
 
 export default IngredientDetails;

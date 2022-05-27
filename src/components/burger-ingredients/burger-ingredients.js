@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css'
 import PropTypes from 'prop-types';
@@ -24,7 +24,7 @@ const MenuItems = () => {
 }
 
 const Item = (props) => {
-  const [active, setActive] = useState({ active: false });
+  const [active, setActive] = useState(false);
 
   const openModal = () => setActive(true);
 
@@ -47,11 +47,11 @@ const Item = (props) => {
 }
 
 Item.propTypes = {
-  item:
-    PropTypes.arrayOf(ingredientType.isRequired).isRequired
+  items: PropTypes.object,
 };
 
 const Ingredients = (props) => {
+ 
   return (
     <div className={styles.container}>
 
