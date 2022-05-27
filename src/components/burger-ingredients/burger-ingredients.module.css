@@ -30,6 +30,7 @@ max-height: calc(100vh - 100px);
     max-width: 240px;
     margin-bottom: 32px;
     position: relative;
+    cursor: pointer;
 }
 
 .img{

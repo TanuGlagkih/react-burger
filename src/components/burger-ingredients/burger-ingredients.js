@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css'
 import PropTypes from 'prop-types';
 import ingredientType from '../../utils/types';
+import IngredientDetails from '../ingredient-detales/ingredient-details';
+import Modal from '../modal/modal';
 
 const MenuItems = () => {
   const [current, setCurrent] = React.useState('bun')
@@ -22,21 +24,30 @@ const MenuItems = () => {
 }
 
 const Item = (props) => {
+  const [active, setActive] = useState({ active: false });
+
+  const openModal = () => setActive(true);
+
   return (
-    <li className={styles.li} key={props.items.id}>
-      <img src={props.items.image} className={styles.img}></img>
-      <Counter count={1} size="default" className={styles.counter} />
-      <div className={styles.price}>
-        <p className="text text_type_digits-default">{props.items.price}</p>
-        <CurrencyIcon type="primary" />
-      </div>
-      <p className={`${styles.text} text text_type_main-default `} > {props.items.name} </p>
-    </li>
+    <>
+      <li className={styles.li} key={props.items._id} onClick={openModal}>
+        <img src={props.items.image} className={styles.img}></img>
+        <Counter count={1} size="default" className={styles.counter} />
+        <div className={styles.price}>
+          <p className="text text_type_digits-default">{props.items.price}</p>
+          <CurrencyIcon type="primary" />
+        </div>
+        <p className={`${styles.text} text text_type_main-default `} > {props.items.name} </p>
+      </li>
+      <Modal active={active} setActive={setActive}>
+        <IngredientDetails key={props.items._id} item={props.items} active={active} />
+      </Modal>
+    </>
   )
 }
 
 Item.propTypes = {
- item:
+  item:
     PropTypes.arrayOf(ingredientType.isRequired).isRequired
 };
 
