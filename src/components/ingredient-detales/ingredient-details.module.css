@@ -1,0 +1,28 @@
+.box {
+    display: none;
+}
+
+.boxActive {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+    height: 500px;
+    z-index: 11;
+}
+
+.h {
+    margin: 40px 200px 0px 40px;
+}
+
+.nutrientsBox {
+    margin-bottom: 60px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.text {
+    text-align: center;
+}
