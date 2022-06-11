@@ -9,26 +9,22 @@ export const ADD_BUN_SUCCESS = 'ADD_BUN_SUCCESS';
 export const REMOVE_INGREDIENT = 'REMOVE_INGREDIENT';
 export const REPLASE_INGREDIENTS='REPLASE_INGREDIENTS';
 
+export const NEW_ORDER = 'NEW_ORDER';
 
 export function addIngredients(item,key) {
-    return function (dispatch) {
-        dispatch({
-            type: ADD_INGREDIENT,
-        });
-        try {
-            dispatch({
+            try {
+            return{
                 type: ADD_INGREDIENT_SUCCESS,
                 item,
                 key
-            })
+            }
         }
         catch (err) {
-            dispatch({
+            return{
                 type: ADD_INGREDIENT_FAILED
-            })
+            }
         }
     }
-}
 
 export function addBun(item) {
     return function (dispatch) {

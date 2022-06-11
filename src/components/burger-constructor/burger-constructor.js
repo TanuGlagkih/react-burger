@@ -1,13 +1,15 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-constructor.module.css'
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { orderDetails } from '../services/actions/order-details';
-import { MODAL_OPEN } from '../services/actions/modal'
+import { orderDetails } from '../../services/actions/order-details';
 import { useDrag, useDrop } from 'react-dnd';
-import { addBun, addIngredients, moveCard, REMOVE_INGREDIENT } from '../services/actions/burger-constructor';
+import { addBun, addIngredients, moveCard, NEW_ORDER, REMOVE_INGREDIENT } from '../../services/actions/burger-constructor';
 import { v4 as uuidv4 } from 'uuid';
-import { ingredientCounterIncrease, INGREDIENT_COUNTER_DECREASE } from '../services/actions/burger-ingredients';
+import { CLEAR_COUNTER, ingredientCounterIncrease, INGREDIENT_COUNTER_DECREASE } from '../../services/actions/burger-ingredients';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
 
 const MainPartOfBurger = ({ item, index, id }) => {
   const dispatch = useDispatch();
@@ -82,10 +84,17 @@ const MainPartOfBurger = ({ item, index, id }) => {
   )
 }
 
+MainPartOfBurger.propTypes = {
+  item: PropTypes.object,
+  index: PropTypes.number,
+  id: PropTypes.string
+};
+
 const OrderElement = () => {
   const { ingredients } = useSelector(state => state.product);
   const { buns } = useSelector(state => state.product);
   const dispatch = useDispatch();
+  const [active, setActive] = useState(false);
 
   const openModal = () => {
     if (!buns) {
@@ -96,12 +105,8 @@ const OrderElement = () => {
     const uniqueSet = new Set(ingredientId)
     const orderData = [...uniqueSet]
     orderData.push(bunsId)
-
-    console.log(orderData)
+    setActive(true)
     dispatch(orderDetails(orderData));
-    dispatch({
-      type: MODAL_OPEN,
-    })
   }
 
   const totalPrice = useMemo(() => {
@@ -123,13 +128,17 @@ const OrderElement = () => {
           Оформить заказ
         </Button>
       </div>
+      <Modal active={active} setActive={setActive}>
+        <OrderDetails /*active={active} setActive={setActive} */ />
+      </Modal>
     </>
   )
 }
 
 const BurgerConstructor = () => {
   const { ingredients } = useSelector(state => state.product);
-  const { buns } = useSelector(state => state.product)
+  const { buns } = useSelector(state => state.product);
+  const { orderNumber } = useSelector(state => state.order);
 
   const dispatch = useDispatch();
 
@@ -159,6 +168,17 @@ const BurgerConstructor = () => {
     border = '2px dashed green';
   }
 
+  useEffect(() => {
+    if (orderNumber) {
+      dispatch({
+        type: NEW_ORDER,
+      })
+      dispatch({
+        type: CLEAR_COUNTER,
+      })
+    }
+  }, [orderNumber])
+
   return (
     <div className={styles.box} >
       <div className={styles.items} ref={drop} style={{ ...styles, opacity, border }}>
@@ -171,7 +191,7 @@ const BurgerConstructor = () => {
             <ConstructorElement
               type="top"
               isLocked={true}
-              text={`${buns.name} (низ)`}
+              text={`${buns.name} (верх)`}
               price={buns.price}
               thumbnail={buns.image}
               key={buns._id}

@@ -6,7 +6,8 @@ import {
     ADD_BUN_SUCCESS,
     ADD_BUN_FAILED,
     REMOVE_INGREDIENT,
-    REPLASE_INGREDIENTS
+    REPLASE_INGREDIENTS,
+    NEW_ORDER
 } from "../actions/burger-constructor";
 
 const initialBurgerState = {
@@ -53,6 +54,12 @@ export const constructorReducer = (state = initialBurgerState, action) => {
             return {
                 ...state,
                 ingredients: ingredients
+            }
+        }
+        case NEW_ORDER: {
+            return {
+                buns: null,
+                ingredients: [],
             }
         }
         default: {

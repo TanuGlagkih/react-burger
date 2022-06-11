@@ -1,4 +1,4 @@
-import { order } from "../API";
+import { baseUrl, checkResponse } from "../API";
 
 export const GETTING_ORDER_DETAILS = 'GETTING_ORDER_DETAILS';
 export const GET_ORDER_DETAILS_SUCCESS = 'GET_ORDER_DETAILS_SUCCESS';
@@ -10,32 +10,31 @@ export const orderDetails = (orderData) => {
         dispatch({
             type: GETTING_ORDER_DETAILS,
         });
-          fetch(order, {
+        fetch(`${baseUrl}/orders`, {
             method: 'post',
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
-              },
-              body: JSON.stringify({
+            },
+            body: JSON.stringify({
                 ingredients: orderData,
-              }),
-                    })
+            }),
+        })
+            .then(checkResponse)
             .then((res) => {
-                return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
-            }).then((res) => {
                 if (res && res.success) {
                     dispatch({
                         type: GET_ORDER_DETAILS_SUCCESS,
                         orderNumber: res.order.number,
                     })
                 } else {
-                    dispatch({
-                        type: GET_ORDER_DETAILS_FAILED
-                    })
+                    orderRequestFailed()
                 }
-            }).catch(err => {
-                dispatch({
-                    type: GET_ORDER_DETAILS_FAILED
-                })
-            })
+            }).catch(err => orderRequestFailed())
+    }
+}
+
+const orderRequestFailed = () => {
+    return {
+        type: GET_ORDER_DETAILS_FAILED,
     }
 }

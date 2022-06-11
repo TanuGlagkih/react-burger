@@ -3,12 +3,11 @@ import {
     BURGER_INGREDIENTS_REQUEST_FAILED,
     BURGER_INGREDIENTS_REQUEST_SUCCESS,
     GET_INGREDIENT_DETAILS,
-    GET_INGREDIENT_DETAILS_FAILED,
-    GET_INGREDIENT_DETAILS_SUCCESS,
     BUN_INCREASER,
     OTHER_INGREDIENTS_INCREASER,
     INGREDIENT_DETAILS_CLOSING,
-    INGREDIENT_COUNTER_DECREASE
+    INGREDIENT_COUNTER_DECREASE,
+    CLEAR_COUNTER
 } from "../actions/burger-ingredients";
 
 const initialIngredientsListState = {
@@ -50,19 +49,6 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
         case GET_INGREDIENT_DETAILS: {
             return {
                 ...state,
-                gettingDetails: true
-            }
-        }
-        case GET_INGREDIENT_DETAILS_FAILED: {
-            return {
-                ...state,
-                gettingDetails: false,
-                getDetailsFailed: true
-            }
-        }
-        case GET_INGREDIENT_DETAILS_SUCCESS: {
-            return {
-                ...state,
                 gettingDetails: false,
                 showDetails: true,
                 item: state.items.find(item => item._id === action.id),
@@ -81,7 +67,7 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
             return {
                 ...state,
                 items: [...state.items].map((item) =>
-                    item.type === 'bun' 
+                    item.type === 'bun'
                         ?
                         item._id === action.id ?
                             { ...item, __v: 1 }
@@ -108,6 +94,12 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
             return {
                 ...state,
                 items: [...state.items].map((item) => item._id === action.id ? { ...item, __v: --item.__v } : item)
+            }
+        }
+        case CLEAR_COUNTER: {
+            return {
+                ...state,
+                items: [...state.items].map((item) => item._v !== 0 ? { ...item, __v: 0} : item)
             }
         }
         default: {

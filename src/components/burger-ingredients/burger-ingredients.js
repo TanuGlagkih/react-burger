@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css'
 import PropTypes from 'prop-types';
-import ingredientType from '../../utils/types';
-import IngredientDetails from '../ingredient-detales/ingredient-details';
-import Modal from '../modal/modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDetails, getItems } from '../services/actions/burger-ingredients';
-import { MODAL_OPEN } from '../services/actions/modal';
+import { getDetails, getItems } from '../../services/actions/burger-ingredients';
 import { useDrag } from 'react-dnd';
+import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-detales/ingredient-details';
 
 const MenuItems = ({ current, setCurrent }) => {
 
@@ -42,13 +40,12 @@ const MenuItems = ({ current, setCurrent }) => {
 }
 
 const Item = ({ item }) => {
+  const [active, setActive] = useState(false);
   const dispatch = useDispatch();
 
   const openModal = () => {
+    setActive(true);
     dispatch(getDetails(item._id));
-    dispatch({
-      type: MODAL_OPEN
-    })
   }
   const [{ opacity }, ref] = useDrag({
     type: 'all',
@@ -70,6 +67,9 @@ const Item = ({ item }) => {
         </div>
         <p className={`${styles.text} text text_type_main-default `} > {item.name} </p>
       </li>
+      <Modal active={active} setActive={setActive}>
+        <IngredientDetails /*key={props.items._id} item={props.items} active={active}*/ />
+      </Modal>
     </>
   )
 }
@@ -136,11 +136,10 @@ const Ingredients = ({ setCurrent }) => {
     </div>
   )
 }
-/*
+
 Ingredients.propTypes = {
-  list:
-    PropTypes.arrayOf(ingredientType.isRequired).isRequired
-};*/
+  setCurrent: PropTypes.func,
+};
 
 const BurgerIngredients = () => {
 
@@ -156,10 +155,5 @@ const BurgerIngredients = () => {
     </div>
   )
 }
-/*
-BurgerIngredients.propTypes = {
-  data:
-    PropTypes.arrayOf(ingredientType.isRequired).isRequired
-};*/
 
 export default BurgerIngredients;
