@@ -63,11 +63,6 @@ max-height: calc(100vh - 100px);
     margin-top: 20px;
 }
 
-.counter{
-    position: 'absolute';
-    padding: 0px 0px auto;
-}
-
 .text {
     text-align: center;
 }

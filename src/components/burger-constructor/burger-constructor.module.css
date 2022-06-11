@@ -1,43 +1,47 @@
-.constructor{
+.box {
     max-width: 700px;
     padding-top: 100px;
-    position:relative;
+    position: relative;
     max-height: calc(100vh - 100px);
 }
 
-.ul{
-   overflow-y: scroll;
-   list-style-type: none;
-   max-height: calc(100vh - 410px);
-   gap: 10px;
-   margin: 0px;
-   padding-left: 0px;
+.ul {
+    overflow-y: auto;
+    list-style-type: none;
+    max-height: calc(100vh - 410px);
+    gap: 10px;
+    margin: 0px;
+    padding-left: 0px;
+    }
+
+.li {
+    cursor: move;
 }
 
 .li:not(:last-child) {
-   margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
-.order{
+.order {
     display: flex;
-    position:absolute;
-    bottom:0;
+    position: absolute;
+    bottom: 0;
     right: 30px;
 }
 
-.cost{
+.cost {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 40px;
 }
 
-.top{
- margin-left: 25px;
- top: 0;
+.top {
+    margin-left: 25px;
+    top: 0;
 }
 
-.bottom{
+.bottom {
     margin-left: 25px;
     bottom: 60px;
 }
@@ -47,4 +51,56 @@
     flex-direction: column;
     gap: 10px;
     margin: 0px 16px 60px 16px;
+}
+
+.pos_top {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--common-border-radius-s);
+    background: var(--background-element);
+    width: 450px;
+    height: 45px;
+    font-family: 'Jet Brains Mono';
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    flex-grow: 1;
+    border-radius: var(--top-constructor-item-border-radius);
+    }
+
+.pos_bottom {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--common-border-radius-s);
+    background: var(--background-element);  
+    width: 450px;
+    height: 45px;
+    font-family: 'Jet Brains Mono';
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    flex-grow: 1;
+    border-radius: var(--bottom-constructor-item-border-radius);
+}
+
+.row {
+    padding: 16px 24px;
+    margin-left: 25px;
+    display: inline-block;
+    border-radius: var(--common-border-radius-s);
+    background: var(--background-element);
+    width: 450px;
+    height: 45px;
+    font-family: 'Jet Brains Mono';
+    font-size: 16px;
+    line-height: 24px;
+    color: #F2F2F3;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
