@@ -21,8 +21,9 @@ const Modal = ({ active, setActive, children }) => {
             }
         }
         document.addEventListener('keydown', close)
-        return () => document.removeEventListener('onkeydown', close)
-    }, [])
+        return () => document.removeEventListener('keydown', close)
+    }, [setActive])
+
     return ReactDOM.createPortal(
         <div className={active ? styles.containerActive : styles.container}>
             <ModalOverlay active={active} setActive={setActive} />
