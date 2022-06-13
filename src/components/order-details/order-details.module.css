@@ -1,16 +1,25 @@
 .order {
-    display: none;
+  display: none;
 }
 
-.orderActive{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    width: 450px;
-    height: 450px;
-    padding-top: 20px;
-    z-index: 11;
-    margin: 25px;
-    
+.orderActive {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  width: 450px;
+  height: 450px;
+  padding-top: 20px;
+  z-index: 11;
+  margin: 25px;
+}
+
+.message {
+  width: 450px;
+  height: 450px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-left: 25px;
 }

@@ -1,9 +1,13 @@
+import React from 'react';
 import styles from './ingredient-details.module.css'
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-const IngredientDetails = ({ active, item }) => {
+const IngredientDetails = () => {
+    const { item, showDetails } = useSelector(state => state.burger)
+
     return (
-        <div className={active ? styles.boxActive : styles.box}>
+        <div className={showDetails ? styles.boxActive : styles.box}>
             <h1 className={`${styles.h} text text_type_main-medium `}>Детали ингредиента</h1>
             <img src={item.image_large}></img>
             <p className={`${styles.text} text text_type_main-medium mt-4 mb-8`}>{item.name}</p>
