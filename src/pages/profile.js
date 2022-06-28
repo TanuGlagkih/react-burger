@@ -86,7 +86,7 @@ function Profile() {
 
     return (
         <div className={styles.box}>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={change}>
                 <div className='mb-6'>
                     <Input placeholder={'Имя'} onChange={onChange} value={form.name} name={'name'}  icon={'EditIcon'}/>
                 </div>
@@ -102,7 +102,7 @@ function Profile() {
                             <Button type='secondary' size="large" htmlType='submit' onClick={cancel} >
                                 Отмена
                             </Button>
-                            <Button type="primary" size="large" htmlType='submit' onClick={change} >
+                            <Button type="primary" size="large" htmlType='submit'>
                                 Сохранить
                             </Button>
                         </>

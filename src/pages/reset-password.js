@@ -72,7 +72,7 @@ if(location.state !== '/forgot-password'){
 
           return (
         <div className={styles.box}>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={onClick}>
                 <h1 className="text text_type_main-medium mb-6">Восстановление пароля</h1>
                 <div className='mb-6'>
                 <PasswordInput placeholder={'Введите новый пароль'} onChange={onChange} value={form.password} name={'password'} icon={'ShowIcon'} />
@@ -81,7 +81,7 @@ if(location.state !== '/forgot-password'){
                 <Input placeholder={'Введите код из письма'} onChange={onChange} value={form.name} name={'token'} />
                 </div>
                 <div className='mb-20'>
-                    <Button type="primary" size="large" htmlType='submit'onClick={onClick} >
+                    <Button type="primary" size="large" htmlType='submit'>
                         Сохранить
                     </Button>
                 </div>

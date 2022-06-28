@@ -35,7 +35,7 @@ export function LoginPage() {
 
   return (
     <div className={styles.box}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={login}>
         <h1 className="text text_type_main-medium mb-6">Вход</h1>
         <div className='mb-6'>
           <EmailInput placeholder={'Email'} onChange={onChange} value={form.email} name={'email'}/>
@@ -44,7 +44,7 @@ export function LoginPage() {
           <PasswordInput placeholder={'Пароль'} onChange={onChange} value={form.password} name={'password'} className='mb-6' icon={'ShowIcon'} />
         </div>
         <div className='mb-20'>
-          <Button type="primary" size="large" htmlType='submit' onClick={login} >
+          <Button type="primary" size="large" htmlType='submit' >
             Войти
           </Button>
         </div>

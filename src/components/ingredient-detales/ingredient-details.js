@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const IngredientDetails = ({ modal }) => {
-    let { id } = useParams();
+    const { id } = useParams();
     const { items } = useSelector(state => state.burger);
     const item = items.find(item => item._id == `${id}`);
 

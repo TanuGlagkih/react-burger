@@ -60,13 +60,13 @@ export function ForgotPasswordPage() {
 
   return (
     <div className={styles.box}>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onClick}>
         <h1 className="text text_type_main-medium mb-6">Восстановление пароля</h1>
         <div className='mb-6'>
           <EmailInput placeholder={'Email'} onChange={onChange} value={form} name={'email'} />
         </div>
         <div className='mb-20'>
-          <Button type="primary" size="large" htmlType='submit' onClick={onClick} >
+          <Button type="primary" size="large" htmlType='submit' >
             Восстановить
           </Button>
         </div>

@@ -24,9 +24,9 @@ export function getItems() {
                     })
 
                 } else {
-                    ingredientRequestFailed()
+                    dispatch(ingredientRequestFailed())
                 }
-            }).catch(err => ingredientRequestFailed())
+            }).catch(err => dispatch(ingredientRequestFailed()))
     }
 }
 

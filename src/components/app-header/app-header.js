@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './app-header.module.css'
 
@@ -30,7 +30,9 @@ const AppHeader = () => {
         </section>
 
         <section className={styles.logo}>
-          <Logo />
+          <Link to='/'>
+            <Logo />
+          </Link>
         </section>
 
         <section>

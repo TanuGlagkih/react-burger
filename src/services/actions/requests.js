@@ -39,11 +39,11 @@ export const logIn = ({ email, password }) => {
             .then(checkResponse)
             .then(res => {
                 if (res && res.success) {
-                    let authRefreshToken = res.refreshToken;
+                    const authRefreshToken = res.refreshToken;
                     if (authRefreshToken) {
                         setCookie('refreshToken', authRefreshToken);
                     }
-                    let authAccessToken = res.accessToken.split('Bearer ')[1];
+                    const authAccessToken = res.accessToken.split('Bearer ')[1];
                     if (authAccessToken) {
                         setCookie('accessToken', authAccessToken);
                     }
@@ -53,15 +53,10 @@ export const logIn = ({ email, password }) => {
                         name: res.user.name,
                     })
                 } else {
-                    dispatch({
-                        type: LOGIN_REQUEST_FAILED,
-                    })
+                    dispatch(loginRequestFailed())
+                  
                 }
-            }).catch(err => {
-                dispatch({
-                    type: LOGIN_REQUEST_FAILED,
-                })
-            })
+            }).catch(err => dispatch(loginRequestFailed()))
     }
 }
 
@@ -98,15 +93,9 @@ export const register = ({ email, password, name }) => {
                         setCookie('accessToken', authAccessToken);
                     }
                 } else {
-                    dispatch({
-                        type: REGISTER_REQUEST_FAILED,
-                    })
+                    dispatch(registerRequestFailed())
                 }
-            }).catch(err => {
-                dispatch({
-                    type: REGISTER_REQUEST_FAILED,
-                })
-            })
+            }).catch(err => dispatch(registerRequestFailed()))
     }
 }
 
@@ -133,15 +122,9 @@ export const logOut = () => {
                         type: LOGOUT_REQUEST_SUCCESS,
                     })
                 } else {
-                    dispatch({
-                        type: LOGOUT_REQUEST_FAILED,
-                    })
+                    dispatch(logoutRequestFailed())
                 }
-            }).catch(err => {
-                dispatch({
-                    type: LOGOUT_REQUEST_FAILED,
-                })
-            })
+            }).catch(err => dispatch(logoutRequestFailed()))
     }
 }
 
@@ -167,18 +150,14 @@ export const getUserData = () => {
                         name: res.user.name,
                     })
                 } else {
-                    dispatch({
-                        type: GET_USER_DATA_FAILED,
-                    })
+                    dispatch(userDataRequestFailed());
                 }
             }).catch(err => {
                 if (token) {
                     console.log(10);
                     dispatch(refreshToken(getUserData()))
                 }
-                dispatch({
-                    type: GET_USER_DATA_FAILED,
-                })
+                dispatch(userDataRequestFailed());
                 console.log(err)
             })
     }
@@ -213,17 +192,13 @@ export const updateUserData = ({ email, password, name }) => {
                         name: res.user.name,
                     })
                 } else {
-                    dispatch({
-                        type: UPDATE_USER_DATA_FAILED,
-                    })
+                    dispatch(updateDataRequestFailed());
                 }
             }).catch(err => {
                 if (token) {
                     dispatch(refreshToken(updateUserData({ email, password, name })))
                 }
-                dispatch({
-                    type: UPDATE_USER_DATA_FAILED,
-                })
+                dispatch(updateDataRequestFailed());
                 console.log(err)
             })
     }
@@ -258,5 +233,35 @@ export const refreshToken = (afterRefresh) => {
             }).catch(err => {
                 console.log(err)
             })
+    }
+}
+
+const loginRequestFailed = () =>{
+    return {
+        type: LOGIN_REQUEST_FAILED,
+    }
+}
+
+const registerRequestFailed = () => {
+    return {
+        type: REGISTER_REQUEST_FAILED,
+    }
+}
+
+const logoutRequestFailed = () => {
+    return {
+        type: LOGOUT_REQUEST_FAILED,
+    }
+}
+
+const userDataRequestFailed = () => {
+    return {
+        type: GET_USER_DATA_FAILED,
+    }
+}
+
+const updateDataRequestFailed = () => {
+    return {
+        type: UPDATE_USER_DATA_FAILED,
     }
 }

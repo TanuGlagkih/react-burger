@@ -38,7 +38,7 @@ export function RegisterPage() {
 
     return (
         <div className={styles.box}>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={onClick}>
                 <h1 className="text text_type_main-medium mb-6">Регистрация</h1>
                 <div className='mb-6'>
                     <Input placeholder={'Имя'} onChange={onChange} value={form.name} name={'name'} />
@@ -50,7 +50,7 @@ export function RegisterPage() {
                     <PasswordInput placeholder={'Пароль'} onChange={onChange} value={form.password} name={'password'} icon={'ShowIcon'} />
                 </div>
                 <div className='mb-20'>
-                    <Button type="primary" size="large" htmlType='submit' onClick={onClick} >
+                    <Button type="primary" size="large" htmlType='submit' >
                         Зарегистрироваться
                     </Button>
                 </div>

@@ -17,13 +17,13 @@ import { getItems } from '../../services/actions/burger-ingredients.js';
 function App() {
   const dispatch = useDispatch();
   const [active, setActive] = useState(false);
-  let location = useLocation();
+  const location = useLocation();
   
   useEffect(() => {
     dispatch(getItems())
   }, [])
 
-  let background = location.state && location.state.background;
+  const background = location.state && location.state.background;
 
   useEffect(()=>{
    if(location.state && location.state.background){

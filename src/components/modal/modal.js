@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 const modalRoot = document.getElementById('react-modals')
 
 const Modal = ({ active, setActive, children, back }) => {
-    let history = useHistory();
+    const history = useHistory();
     
     const handleClose = () => {
         setActive(false)
@@ -23,10 +23,7 @@ const Modal = ({ active, setActive, children, back }) => {
     useEffect(() => {
         function close(e) {
             if (e.key === 'Escape') {
-                setActive(false);
-                if (back) {
-                    history.goBack();
-                }
+                handleClose()
             }
         }
         document.addEventListener('keydown', close)

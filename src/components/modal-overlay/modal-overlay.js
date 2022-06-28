@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 const ModalOverlay = ({ active, setActive, back }) => {
-    let history = useHistory();
+    const history = useHistory();
     
     const handleClosing = () => {
         setActive(false)
