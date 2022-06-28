@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './app-header.module.css'
 
@@ -8,18 +9,23 @@ const AppHeader = () => {
       <nav className={styles.header}>
 
         <section>
+
           <div className={styles.elem}>
             <div className={styles.icon}>
               <BurgerIcon type="primary" />
             </div>
-            <p className="text text_type_main-default">Конструктор</p>
+            <NavLink to='/' className={`${styles.main_link} text text_type_main-default text_color_inactive`} activeClassName={styles.active}>
+              Конструктор
+            </NavLink>
           </div>
 
           <div className={styles.elem}>
             <div className={styles.icon}>
               <ListIcon type="secondary" />
             </div>
-            <p className="text text_type_main-default text_color_inactive">Лента заказов</p>
+            <NavLink to='/order' className={`${styles.link} text text_type_main-default text_color_inactive`} activeClassName={styles.active}>
+              Лента заказов
+            </NavLink>
           </div>
         </section>
 
@@ -32,7 +38,9 @@ const AppHeader = () => {
             <div className={styles.icon}>
               <ProfileIcon type="secondary" />
             </div>
-            <p className="text text_type_main-default text_color_inactive">Личный кабинет</p>
+            <NavLink to='/profile' className={`${styles.link} text text_type_main-default text_color_inactive`} activeClassName={styles.active}>
+              Личный кабинет
+            </NavLink>
           </section>
         </section>
       </nav>

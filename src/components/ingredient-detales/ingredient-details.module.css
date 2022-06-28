@@ -1,5 +1,8 @@
 .box {
-    display: none;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10vh;
 }
 
 .boxActive {
@@ -13,6 +16,9 @@
 
 .h {
     margin: 40px 200px 0px 40px;
+}
+.head {
+    margin: 0px;
 }
 
 .nutrientsBox {

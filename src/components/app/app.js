@@ -1,23 +1,71 @@
-import AppHeader from '../app-header/app-header.js'
-import BurgerConstructor from '../burger-constructor/burger-constructor.js';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients.js';
-import styles from './app.module.css'
-import React from 'react';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import AppHeader from '../app-header/app-header.js';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useLocation } from 'react-router-dom';
+import { LoginPage } from '../../pages/login.js';
+import { RegisterPage } from '../../pages/register.js';
+import { HomePage } from '../../pages/home.js';
+import { ForgotPasswordPage } from '../../pages/forgot-password.js';
+import IngredientDetails from '../ingredient-detales/ingredient-details.js';
+import { ProfilePage } from '../../pages/profile.js';
+import { ProtectedRoute } from '../protected-route/protected-route.js';
+import { ResetPasswordPage } from '../../pages/reset-password.js';
+import { NotFound404 } from '../../pages/not-found.js';
+import Modal from '../modal/modal.js';
+import { useDispatch } from 'react-redux';
+import { getItems } from '../../services/actions/burger-ingredients.js';
 
 function App() {
+  const dispatch = useDispatch();
+  const [active, setActive] = useState(false);
+  let location = useLocation();
+  
+  useEffect(() => {
+    dispatch(getItems())
+  }, [])
 
+  let background = location.state && location.state.background;
+
+  useEffect(()=>{
+   if(location.state && location.state.background){
+    setActive(true)
+      }
+}, [background])
+ 
   return (
-    <div className="App">
+    <>
       <AppHeader />
-      <main className={styles.main}>
-        <DndProvider backend={HTML5Backend}>
-          <BurgerIngredients />
-          <BurgerConstructor />
-        </DndProvider>
-      </main>
-    </div>
+      <Switch location={background || location}>
+        <Route path='/login'>
+          <LoginPage />
+        </Route>
+        <Route path='/register'>
+          <RegisterPage />
+        </Route>
+        <Route path='/forgot-password'>
+          <ForgotPasswordPage />
+        </Route>
+        <Route path='/reset-password'>
+          <ResetPasswordPage />
+        </Route>
+        <ProtectedRoute path='/profile'>
+          <ProfilePage />
+        </ProtectedRoute>
+        <Route path='/ingredients/:id'>
+          <IngredientDetails />
+        </Route>
+        <Route path='/' exact={true}>
+          <HomePage />
+        </Route>
+        <Route>
+          <NotFound404 />
+        </Route>
+      </Switch>
+      {background && <Route path="/ingredients/:id" >
+       <Modal active={active} setActive={setActive} back={true}> 
+        <IngredientDetails modal={true}/>
+      </Modal> 
+      </Route>}
+    </>
   );
 }
 

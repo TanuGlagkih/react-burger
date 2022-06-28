@@ -2,10 +2,8 @@ import {
     BURGER_INGREDIENTS_REQUEST,
     BURGER_INGREDIENTS_REQUEST_FAILED,
     BURGER_INGREDIENTS_REQUEST_SUCCESS,
-    GET_INGREDIENT_DETAILS,
     BUN_INCREASER,
     OTHER_INGREDIENTS_INCREASER,
-    INGREDIENT_DETAILS_CLOSING,
     INGREDIENT_COUNTER_DECREASE,
     CLEAR_COUNTER
 } from "../actions/burger-ingredients";
@@ -15,12 +13,6 @@ const initialIngredientsListState = {
 
     ingredientsRequest: false,
     ingredientsRequestFailed: false,
-
-    item: {},
-    currentItemId: '',
-    showDetails: false,
-    gettingDetails: false,
-    getDetailsFailed: false,
 }
 
 export const burgerReducer = (state = initialIngredientsListState, action) => {
@@ -44,23 +36,6 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
                 ...state,
                 ingredientsRequest: false,
                 ingredientsRequestFailed: true
-            }
-        }
-        case GET_INGREDIENT_DETAILS: {
-            return {
-                ...state,
-                gettingDetails: false,
-                showDetails: true,
-                item: state.items.find(item => item._id === action.id),
-                currentItemId: action.id,
-            }
-        }
-        case INGREDIENT_DETAILS_CLOSING: {
-            return {
-                ...state,
-                item: {},
-                currentItemId: '',
-                showDetails: false
             }
         }
         case BUN_INCREASER: {

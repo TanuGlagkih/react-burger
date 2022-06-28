@@ -1,0 +1,53 @@
+.box {
+    padding-top: 5vh;
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+}
+
+.profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    margin-top: 10vh;
+    margin-left: 10vw;
+}
+
+.bar {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5vh;
+    margin-right: 5vw;
+}
+
+.link{
+    text-decoration:none;
+}
+
+.a{
+    text-decoration:none;
+    cursor: pointer;
+}
+
+.active{
+    color: white;
+}
+
+.not_found{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10vh;
+}
