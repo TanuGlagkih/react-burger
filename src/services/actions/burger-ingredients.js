@@ -4,9 +4,6 @@ export const BURGER_INGREDIENTS_REQUEST = 'BURGER_INGREDIENTS_REQUEST';
 export const BURGER_INGREDIENTS_REQUEST_SUCCESS = 'BURGER_INGREDIENTS_REQUEST_SUCCESS';
 export const BURGER_INGREDIENTS_REQUEST_FAILED = 'BURGER_INGREDIENTS_REQUEST_FAILED';
 
-export const GET_INGREDIENT_DETAILS = 'GET_INGREDIENT_DETAILS';
-export const INGREDIENT_DETAILS_CLOSING = 'INGREDIENT_DETAILS_CLOSING';
-
 export const BUN_INCREASER = 'BUN_INCREASER';
 export const OTHER_INGREDIENTS_INCREASER = ' OTHER_INGREDIENTS_INCREASER';
 export const INGREDIENT_COUNTER_DECREASE = 'INGREDIENT_COUNTER_DECREASE';
@@ -27,22 +24,15 @@ export function getItems() {
                     })
 
                 } else {
-                    ingredientRequestFailed()
+                    dispatch(ingredientRequestFailed())
                 }
-            }).catch(err => ingredientRequestFailed())
+            }).catch(err => dispatch(ingredientRequestFailed()))
     }
 }
 
 const ingredientRequestFailed = () => {
     return {
         type: BURGER_INGREDIENTS_REQUEST_FAILED,
-    }
-}
-
-export function getDetails(itemId) {
-    return {
-        type: GET_INGREDIENT_DETAILS,
-        id: itemId
     }
 }
 

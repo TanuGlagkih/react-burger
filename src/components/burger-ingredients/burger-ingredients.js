@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css'
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { getDetails, getItems } from '../../services/actions/burger-ingredients';
+import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-detales/ingredient-details';
 
 const MenuItems = ({ current, setCurrent }) => {
 
@@ -40,13 +38,8 @@ const MenuItems = ({ current, setCurrent }) => {
 }
 
 const Item = ({ item }) => {
-  const [active, setActive] = useState(false);
-  const dispatch = useDispatch();
+  let location = useLocation();
 
-  const openModal = () => {
-    setActive(true);
-    dispatch(getDetails(item._id));
-  }
   const [{ opacity }, ref] = useDrag({
     type: 'all',
     item: item,
@@ -57,19 +50,25 @@ const Item = ({ item }) => {
 
   return (
     < >
-      <li className={styles.li} key={item._id} onClick={openModal} ref={ref} style={{ opacity }}>
-        <img src={item.image} className={styles.img}></img>
-        {item.__v !== 0 &&
-          <Counter count={item.__v} size="default" />}
-        <div className={styles.price}>
-          <p className="text text_type_digits-default">{item.price}</p>
-          <CurrencyIcon type="primary" />
-        </div>
-        <p className={`${styles.text} text text_type_main-default `} > {item.name} </p>
-      </li>
-      <Modal active={active} setActive={setActive}>
-        <IngredientDetails /*key={props.items._id} item={props.items} active={active}*/ />
-      </Modal>
+      <Link
+        key={item._id}
+        to={{
+          pathname: `/ingredients/${item._id}`,
+          state: { background: location }
+        }}
+        className={styles.link}
+      >
+        <li className={styles.li} key={item._id} ref={ref} style={{ opacity }}>
+          <img src={item.image} className={styles.img}></img>
+          {item.__v !== 0 &&
+            <Counter count={item.__v} size="default" />}
+          <div className={styles.price}>
+            <p className={`${styles.link} text text_type_digits-default`}>{item.price}</p>
+            <CurrencyIcon type="primary" />
+          </div>
+          <p className={`${styles.text} text text_type_main-default `} > {item.name} </p>
+        </li>
+      </Link>
     </>
   )
 }
@@ -94,12 +93,6 @@ const Ingredients = ({ setCurrent }) => {
         :
         setCurrent('sauce');
   }
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getItems())
-  }, [dispatch])
 
   const { items } = useSelector(state => state.burger);
 

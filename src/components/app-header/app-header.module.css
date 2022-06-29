@@ -36,3 +36,16 @@ section {
     justify-content: space-around;
    }
 }
+
+.main_link{
+    text-decoration:none;
+    color: white;
+}
+
+.link{
+    text-decoration:none;
+    }
+
+.active{
+       color: white;
+}

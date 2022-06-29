@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CLEAR_COUNTER, ingredientCounterIncrease, INGREDIENT_COUNTER_DECREASE } from '../../services/actions/burger-ingredients';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const MainPartOfBurger = ({ item, index, id }) => {
   const dispatch = useDispatch();
@@ -93,12 +94,18 @@ MainPartOfBurger.propTypes = {
 const OrderElement = () => {
   const { ingredients } = useSelector(state => state.product);
   const { buns } = useSelector(state => state.product);
+  const { isAuth } = useSelector(state => state.requests);
   const dispatch = useDispatch();
   const [active, setActive] = useState(false);
+  const location = useLocation();
+  const history = useHistory()
 
   const openModal = () => {
     if (!buns) {
       return
+    }
+    if (!isAuth) {
+      return history.push('/login', {state: { from: location }})
     }
     const ingredientId = ingredients.map((item) => item._id)
     const bunsId = buns._id;

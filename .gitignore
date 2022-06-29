@@ -8,6 +8,7 @@
 # testing
 /coverage
 /src/tests
+/src/services/requests.js
 
 # production
 /build
