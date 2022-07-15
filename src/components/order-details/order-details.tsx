@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
 const OrderDetails = () => {
+    // @ts-ignore
     const { orderNumber, showOrderDetails, customMessage } = useSelector(state => state.order)
 
     return (
@@ -24,11 +24,6 @@ const OrderDetails = () => {
             )}
         </>
     )
-}
-
-OrderDetails.propTypes = {
-    active: PropTypes.bool,
-    setActive: PropTypes.func,
 }
 
 export default OrderDetails;

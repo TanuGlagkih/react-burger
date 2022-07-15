@@ -1,9 +1,14 @@
 import React from 'react';
 import styles from './modal-overlay.module.css';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-const ModalOverlay = ({ active, setActive, back }) => {
+interface IModalOverlay {
+    active: boolean, 
+    setActive: (active: boolean)=>void, 
+    back: boolean | undefined,
+}
+
+const ModalOverlay = ({ active, setActive, back }: IModalOverlay ) => {
     const history = useHistory();
     
     const handleClosing = () => {
@@ -15,11 +20,6 @@ const ModalOverlay = ({ active, setActive, back }) => {
     return (
         <div className={active ? styles.backgroundActive : styles.background} onClick={handleClosing} />
     )
-}
-
-ModalOverlay.propTypes = {
-    active: PropTypes.bool,
-    setActive: PropTypes.func,
 }
 
 export default ModalOverlay;

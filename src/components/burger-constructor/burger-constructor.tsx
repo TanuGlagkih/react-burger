@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ConstructorElement, CurrencyIcon, Button, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-constructor.module.css'
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { orderDetails } from '../../services/actions/order-details';
 import { useDrag, useDrop } from 'react-dnd';
@@ -11,10 +10,22 @@ import { CLEAR_COUNTER, ingredientCounterIncrease, INGREDIENT_COUNTER_DECREASE }
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useHistory, useLocation } from 'react-router-dom';
+import { IIngredients } from '../../utils/types';
 
-const MainPartOfBurger = ({ item, index, id }) => {
+type TMainPartOfBurgerProps = {
+  item: IIngredients,
+  index: number,
+  id: string,
+};
+
+type TDraggingElement = {
+  id: string,
+  index: number,
+}
+
+const MainPartOfBurger = ({ item, index, id }: TMainPartOfBurgerProps) => {
   const dispatch = useDispatch();
-  const handleClose = (id, key) => {
+  const handleClose = (id: string, key: string) => {
     dispatch({
       type: REMOVE_INGREDIENT,
       key: key
@@ -37,23 +48,24 @@ const MainPartOfBurger = ({ item, index, id }) => {
       if (!ref.current) {
         return
       }
-      const dragIndex = item.index;
+      const dragIndex = (item as TDraggingElement).index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) {
         return
       }
-      const hoverBoundingRect = ref.current?.getBoundingClientRect()
+      const hoverBoundingRect = (ref.current as HTMLDivElement)?.getBoundingClientRect();
       const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-      const clientOffset = monitor.getClientOffset()
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
+      if (dragIndex && dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return
       }
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      if (dragIndex && dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return
       }
-      item.index = hoverIndex
+      (item as TDraggingElement).index = hoverIndex
+      // @ts-ignore
       dispatch(moveCard(dragIndex, hoverIndex));
     },
   })
@@ -66,7 +78,6 @@ const MainPartOfBurger = ({ item, index, id }) => {
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0 : 1,
     }),
-
   })
   drag(drop(ref));
 
@@ -78,22 +89,19 @@ const MainPartOfBurger = ({ item, index, id }) => {
           text={item.name}
           price={item.price}
           thumbnail={item.image}
-          handleClose={() => handleClose(item._id, item.key)}
+          handleClose={() => handleClose(item._id, item.key as string)}
         />
       </li>
     </>
   )
 }
 
-MainPartOfBurger.propTypes = {
-  item: PropTypes.object,
-  index: PropTypes.number,
-  id: PropTypes.string
-};
-
 const OrderElement = () => {
+  // @ts-ignore
   const { ingredients } = useSelector(state => state.product);
+  // @ts-ignore
   const { buns } = useSelector(state => state.product);
+  // @ts-ignore
   const { isAuth } = useSelector(state => state.requests);
   const dispatch = useDispatch();
   const [active, setActive] = useState(false);
@@ -105,20 +113,21 @@ const OrderElement = () => {
       return
     }
     if (!isAuth) {
-      return history.push('/login', {state: { from: location }})
+      return history.push('/login', { state: { from: location } })
     }
-    const ingredientId = ingredients.map((item) => item._id)
+    const ingredientId = ingredients.map((item: IIngredients) => item._id)
     const bunsId = buns._id;
-    const uniqueSet = new Set(ingredientId)
+    const uniqueSet = new Set<string>(ingredientId)
     const orderData = [...uniqueSet]
     orderData.push(bunsId)
     setActive(true)
+    // @ts-ignore
     dispatch(orderDetails(orderData));
   }
 
   const totalPrice = useMemo(() => {
     let price = !buns ? 0 : buns.price;
-    return ingredients.reduce((sum, ingredient) => sum + ingredient.price, 0) + price * 2
+    return ingredients.reduce((sum: number, ingredient: IIngredients) => sum + ingredient.price, 0) + price * 2
   }, [buns, ingredients])
 
   return (
@@ -136,27 +145,32 @@ const OrderElement = () => {
         </Button>
       </div>
       <Modal active={active} setActive={setActive}>
-        <OrderDetails /*active={active} setActive={setActive} */ />
+        <OrderDetails />
       </Modal>
     </>
   )
 }
 
 const BurgerConstructor = () => {
+  // @ts-ignore
   const { ingredients } = useSelector(state => state.product);
+  // @ts-ignore
   const { buns } = useSelector(state => state.product);
+  // @ts-ignore
   const { orderNumber } = useSelector(state => state.order);
 
   const dispatch = useDispatch();
 
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: 'all',
-    drop: (item) => {
+    drop: (item: IIngredients) => {
       if (item.type === "bun") {
+        // @ts-ignore
         dispatch(addBun(item));
       } else {
         dispatch(addIngredients({ ...item, key: uuidv4() }));
       }
+      // @ts-ignore
       dispatch(ingredientCounterIncrease(item._id, item.type))
     },
     collect: (monitor) => ({
@@ -215,7 +229,7 @@ const BurgerConstructor = () => {
           </ul>
         ) : (
           <ul className={styles.ul}>
-            {ingredients.map((item, index) => (
+            {ingredients.map((item: IIngredients, index: number) => (
               <MainPartOfBurger index={index} key={item.key} item={item} id={item._id} />
             ))}
           </ul>

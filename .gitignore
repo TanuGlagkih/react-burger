@@ -9,6 +9,7 @@
 /coverage
 /src/tests
 /src/services/requests.js
+/src/services/fetchWithRefresh.js
 
 # production
 /build

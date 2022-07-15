@@ -1,5 +1,5 @@
-import BurgerConstructor from '../components/burger-constructor/burger-constructor.js';
-import BurgerIngredients from '../components/burger-ingredients/burger-ingredients.js';
+import BurgerConstructor from '../components/burger-constructor/burger-constructor';
+import BurgerIngredients from '../components/burger-ingredients/burger-ingredients';
 import styles from './pages.module.css';
 import React from 'react';
 import { DndProvider } from 'react-dnd';

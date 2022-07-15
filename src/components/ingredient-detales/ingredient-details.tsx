@@ -1,13 +1,15 @@
 import React from 'react';
 import styles from './ingredient-details.module.css'
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { IIngredients } from '../../utils/types'
+import { TIngredientDetailsProps } from '../../utils/types'
 
-const IngredientDetails = ({ modal }) => {
-    const { id } = useParams();
-    const { items } = useSelector(state => state.burger);
-    const item = items.find(item => item._id == `${id}`);
+const IngredientDetails = ({ modal }: TIngredientDetailsProps) => {
+    const { id }: any = useParams();
+    // @ts-ignore
+    const { items } = useSelector(state => state.burger); 
+    const item: IIngredients = items.find((item: IIngredients) => item._id == `${id}`);
 
     return (
         <div className={modal ? styles.boxActive : styles.box}>
@@ -39,11 +41,6 @@ const IngredientDetails = ({ modal }) => {
             )}
         </div>
     )
-}
-
-IngredientDetails.propTypes = {
-    active: PropTypes.bool,
-    item: PropTypes.object,
 }
 
 export default IngredientDetails;
