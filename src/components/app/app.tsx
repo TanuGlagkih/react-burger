@@ -1,27 +1,29 @@
-import AppHeader from '../app-header/app-header.js';
+import AppHeader from '../app-header/app-header';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useLocation } from 'react-router-dom';
-import { LoginPage } from '../../pages/login.js';
-import { RegisterPage } from '../../pages/register.js';
-import { HomePage } from '../../pages/home.js';
-import { ForgotPasswordPage } from '../../pages/forgot-password.js';
-import IngredientDetails from '../ingredient-detales/ingredient-details.js';
-import { ProfilePage } from '../../pages/profile.js';
-import { ProtectedRoute } from '../protected-route/protected-route.js';
-import { ResetPasswordPage } from '../../pages/reset-password.js';
-import { NotFound404 } from '../../pages/not-found.js';
-import Modal from '../modal/modal.js';
+import { LoginPage } from '../../pages/login';
+import { RegisterPage } from '../../pages/register';
+import { HomePage } from '../../pages/home';
+import { ForgotPasswordPage } from '../../pages/forgot-password';
+import IngredientDetails from '../ingredient-detales/ingredient-details';
+import { ProfilePage } from '../../pages/profile';
+import { ProtectedRoute } from '../protected-route/protected-route';
+import { ResetPasswordPage } from '../../pages/reset-password';
+import { NotFound404 } from '../../pages/not-found';
+import Modal from '../modal/modal';
 import { useDispatch } from 'react-redux';
-import { getItems } from '../../services/actions/burger-ingredients.js';
+import { getItems } from '../../services/actions/burger-ingredients';
+import { Location } from 'history';
 
 function App() {
   const dispatch = useDispatch();
-  const [active, setActive] = useState(false);
-  const location = useLocation();
+  const [active, setActive] = useState<boolean>(false);
+  const location = useLocation<{background: Location}>();
   
   useEffect(() => {
-    dispatch(getItems())
-  }, [])
+    // @ts-ignore
+    dispatch(getItems()) 
+    }, [])
 
   const background = location.state && location.state.background;
 
@@ -51,7 +53,7 @@ function App() {
           <ProfilePage />
         </ProtectedRoute>
         <Route path='/ingredients/:id'>
-          <IngredientDetails />
+          <IngredientDetails modal={false}/>
         </Route>
         <Route path='/' exact={true}>
           <HomePage />

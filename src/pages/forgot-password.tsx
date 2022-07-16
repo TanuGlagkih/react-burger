@@ -1,48 +1,51 @@
-import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { getUserData } from '../services/actions/requests';
 import { baseUrl, checkResponse } from '../services/API';
-import styles from './pages.module.css'
+import { TResetResponse } from '../utils/types';
+import styles from './pages.module.css';
 
 export function ForgotPasswordPage() {
-  const [form, setValue] = useState('');
+  const [form, setValue] = useState<string>('');
+  // @ts-ignore
   const { isAuth } = useSelector(state => state.requests)
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation()
+  const location = useLocation<string>();
 
-  const onChange = e => {
-    setValue(e.target.value);
+  const onChange = (e: React.ChangeEvent) => {
+    setValue((e.target as HTMLFormElement).value);
   };
 
   useEffect(() => {
+    // @ts-ignore
     dispatch(getUserData())
   }, [])
 
   let onClick = useCallback(
-   async e => {
+    async (e: React.FormEvent): Promise<TResetResponse | void> => {
       e.preventDefault();
-      if(!form){
+      if (!form) {
         return
       }
       fetch(`${baseUrl}/password-reset`, {
         method: 'post',
         headers: {
-            "Content-Type": "application/json;charset=utf-8",
+          "Content-Type": "application/json;charset=utf-8",
         },
         body: JSON.stringify({
-            email: form,
+          email: form,
         }),
-    })
-        .then(checkResponse)
+      })
+        .then(checkResponse<TResetResponse>)
         .then((res) => {
-            if (res && res.success && res.message == "Reset email sent") {
-              history.push('/reset-password', location.pathname)
-            } else {
-                console.log('failed')
-            }
+          if (res && res.success && res.message == "Reset email sent") {
+            history.push('/reset-password', location.pathname)
+          } else {
+            console.log('failed')
+          }
         }).catch(err => console.log('failed'))
     },
     [form]
@@ -63,7 +66,7 @@ export function ForgotPasswordPage() {
       <form className={styles.form} onSubmit={onClick}>
         <h1 className="text text_type_main-medium mb-6">Восстановление пароля</h1>
         <div className='mb-6'>
-          <EmailInput placeholder={'Email'} onChange={onChange} value={form} name={'email'} />
+          <Input placeholder={'Email'} onChange={onChange} value={form} name={'email'} />
         </div>
         <div className='mb-20'>
           <Button type="primary" size="large" htmlType='submit' >

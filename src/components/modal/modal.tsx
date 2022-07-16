@@ -5,12 +5,18 @@ import styles from './modal.module.css'
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components"
 import ModalOverlay from "../modal-overlay/modal-overlay"
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-const modalRoot = document.getElementById('react-modals')
+const modalRoot = document.getElementById('react-modals')!
 
-const Modal = ({ active, setActive, children, back }) => {
+interface IModal {
+    active: boolean, 
+    setActive: (active: boolean)=> void, 
+    children?: JSX.Element, 
+    back?: boolean,
+}
+
+const Modal = ({ active, setActive, children, back }: IModal) => {
     const history = useHistory();
     
     const handleClose = () => {
@@ -18,10 +24,9 @@ const Modal = ({ active, setActive, children, back }) => {
         if (back) {
             history.goBack();
         }
-
     }
     useEffect(() => {
-        function close(e) {
+        function close(e: KeyboardEvent) {
             if (e.key === 'Escape') {
                 handleClose()
             }
@@ -42,12 +47,6 @@ const Modal = ({ active, setActive, children, back }) => {
         </div>
         , modalRoot
     )
-}
-
-Modal.propTypes = {
-    active: PropTypes.bool,
-    setActive: PropTypes.func,
-    children: PropTypes.element,
 }
 
 export default Modal; 

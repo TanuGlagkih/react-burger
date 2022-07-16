@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
+import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css'
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
+import { IIngredients } from '../../utils/types';
 
-const MenuItems = ({ current, setCurrent }) => {
+interface IMenuItemsProps {
+  current: string,
+  setCurrent: (current: string)=>void,
+}
+
+  const MenuItems = ({ current, setCurrent }: IMenuItemsProps) => {
 
   useEffect(() => {
     switch (current) {
       case 'bun': {
-        return document.getElementById('bunsList').scrollIntoView();
+        return (document.getElementById('bunsList') as HTMLDivElement).scrollIntoView();
       }
       case 'sauce': {
-        return document.getElementById('sauceList').scrollIntoView();
+        return (document.getElementById('sauceList')as HTMLDivElement).scrollIntoView();
       }
       case 'main': {
-        return document.getElementById('mainList').scrollIntoView();
+        return (document.getElementById('mainList')as HTMLDivElement).scrollIntoView();
       }
     }
   }, [current])
@@ -37,7 +42,11 @@ const MenuItems = ({ current, setCurrent }) => {
   )
 }
 
-const Item = ({ item }) => {
+interface IItemProps {
+  item: IIngredients
+}
+
+const Item = ({ item }: IItemProps) => {
   let location = useLocation();
 
   const [{ opacity }, ref] = useDrag({
@@ -73,17 +82,13 @@ const Item = ({ item }) => {
   )
 }
 
-Item.propTypes = {
-  items: PropTypes.object,
-};
-
-const Ingredients = ({ setCurrent }) => {
+const Ingredients = ({ setCurrent }: IMenuItemsProps) => {
 
   function getCords() {
-    const menu = document.getElementById('menu').getBoundingClientRect().top;
-    const bunSection = document.getElementById('bunsList').getBoundingClientRect().top;
-    const sauceSection = document.getElementById('sauceList').getBoundingClientRect().top;
-    const mainSection = document.getElementById('mainList').getBoundingClientRect().top;
+    const menu = (document.getElementById('menu')as HTMLDivElement).getBoundingClientRect().top;
+    const bunSection = (document.getElementById('bunsList')as HTMLDivElement).getBoundingClientRect().top;
+    const sauceSection = (document.getElementById('sauceList')as HTMLDivElement).getBoundingClientRect().top;
+    const mainSection = (document.getElementById('mainList')as HTMLDivElement).getBoundingClientRect().top;
 
     Math.abs(menu - bunSection) < Math.abs(menu - sauceSection) ?
       setCurrent('bun')
@@ -94,7 +99,8 @@ const Ingredients = ({ setCurrent }) => {
         setCurrent('sauce');
   }
 
-  const { items } = useSelector(state => state.burger);
+  //@ts-ignore
+  const { items } = useSelector(state => state.burger); 
 
   return (
     <div onScroll={getCords} className={styles.container}>
@@ -102,7 +108,7 @@ const Ingredients = ({ setCurrent }) => {
       <section id='bunsList' className={styles.section}>
         <h2 className="text text_type_main-medium">Булки</h2>
         <ul className={styles.ingredients}>
-          {items.filter(item => item.type === 'bun').map(item => (
+          {items.filter((item: IIngredients) => item.type === 'bun').map((item: IIngredients) => (
             <Item key={item._id} item={item} />
           ))}
         </ul>
@@ -111,7 +117,7 @@ const Ingredients = ({ setCurrent }) => {
       <section id='sauceList' className={styles.section}>
         <h2 className="text text_type_main-medium">Соусы</h2>
         <ul className={styles.ingredients}>
-          {items.filter(item => item.type === 'sauce').map(item => (
+          {items.filter((item: IIngredients) => item.type === 'sauce').map((item: IIngredients) => (
             <Item key={item._id} item={item} />
           ))}
         </ul>
@@ -120,7 +126,7 @@ const Ingredients = ({ setCurrent }) => {
       <section id='mainList' className={styles.section}>
         <h2 className="text text_type_main-medium">Начинки</h2>
         <ul className={styles.ingredients}>
-          {items.filter(item => item.type === 'main').map(item => (
+          {items.filter((item: IIngredients) => item.type === 'main').map((item: IIngredients) => (
             <Item key={item._id} item={item} />
           ))}
         </ul>
@@ -129,10 +135,6 @@ const Ingredients = ({ setCurrent }) => {
     </div>
   )
 }
-
-Ingredients.propTypes = {
-  setCurrent: PropTypes.func,
-};
 
 const BurgerIngredients = () => {
 
