@@ -22,9 +22,9 @@ React Developer Burger UI Components
 <li>Burger constructor, dragging fillings (drag&drop library) <br>
 <li>Sending an order to the server (available only to authorized users) <br>
 <li>Viewing the current order feed (WebSocket) 
-<ul>
+</ul>
 
-### Technology stack: React, Redux, Typescript
+ ### Technology stack: React, Redux, Typescript
 
 UI components are taken from the library
 React Developer Burger UI Components
