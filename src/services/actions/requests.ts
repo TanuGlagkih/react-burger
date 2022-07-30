@@ -1,28 +1,111 @@
 import { baseUrl, checkResponse } from "../API";
 import { deleteCookie, getCookie, setCookie } from "../utils";
+import {
+    GET_USER_DATA,
+    GET_USER_DATA_FAILED,
+    GET_USER_DATA_SUCCESS,
+    LOGIN_REQUEST,
+    LOGIN_REQUEST_FAILED,
+    LOGIN_REQUEST_SUCCESS,
+    LOGOUT_REQUEST,
+    LOGOUT_REQUEST_FAILED,
+    LOGOUT_REQUEST_SUCCESS,
+    REGISTER_REQUEST,
+    REGISTER_REQUEST_FAILED,
+    REGISTER_REQUEST_SUCCESS,
+    UPDATE_USER_DATA,
+    UPDATE_USER_DATA_FAILED,
+    UPDATE_USER_DATA_SUCCESS
+} from "../constants";
+import { AppThunk } from "../types";
+import { IFormState, TLoginResponce, TResetResponse, TTokenResponce, TUserResponce } from "../../utils/types";
 
-export const LOGIN_REQUEST = 'LOGIN_REQUEST';
-export const LOGIN_REQUEST_SUCCESS = 'LOGIN_REQUEST_SUCCESS';
-export const LOGIN_REQUEST_FAILED = 'LOGIN_REQUEST_FAILED';
+export interface ILoginRequest {
+    readonly type: typeof LOGIN_REQUEST;
+}
 
-export const REGISTER_REQUEST = 'REGISTER_REQUEST';
-export const REGISTER_REQUEST_SUCCESS = 'REGISTER_REQUEST_SUCCESS';
-export const REGISTER_REQUEST_FAILED = 'REGISTER_REQUEST_FAILED';
+export interface ILoginRequestSuccess {
+    readonly type: typeof LOGIN_REQUEST_SUCCESS;
+    email: string;
+    name: string
+}
 
-export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
-export const LOGOUT_REQUEST_SUCCESS = 'LOGOUT_REQUEST_SUCCESS';
-export const LOGOUT_REQUEST_FAILED = 'LOGOUT_REQUEST_FAILED';
+export interface IRegisterRequest {
+    readonly type: typeof REGISTER_REQUEST;
+}
 
-export const GET_USER_DATA = 'GET_USER_DATA'
-export const GET_USER_DATA_SUCCESS = 'GET_USER_DATA_SUCCESS'
-export const GET_USER_DATA_FAILED = 'GET_USER_DATA_FAILED'
+export interface IRegisterRequestSuccess {
+    readonly type: typeof REGISTER_REQUEST_SUCCESS;
+    email: string;
+    name: string
+}
+export interface ILogoutRequest {
+    readonly type: typeof LOGOUT_REQUEST;
+}
 
-export const UPDATE_USER_DATA = 'UPDATE_USER_DATA'
-export const UPDATE_USER_DATA_SUCCESS = 'UPDATE_USER_DATA_SUCCESS'
-export const UPDATE_USER_DATA_FAILED = 'UPDATE_USER_DATA_FAILED'
+export interface ILogoutRequestSuccess {
+    readonly type: typeof LOGOUT_REQUEST_SUCCESS;
+}
 
-export const logIn = ({ email, password }) => {
-    return function (dispatch) {
+export interface IGetUserData {
+    readonly type: typeof GET_USER_DATA;
+}
+
+export interface IGetUserDataSuccess {
+    readonly type: typeof GET_USER_DATA_SUCCESS;
+    email: string;
+    name: string
+}
+
+export interface IUpdateUserData {
+    readonly type: typeof UPDATE_USER_DATA;
+}
+
+export interface IUpdateUserDataSuccess {
+    readonly type: typeof UPDATE_USER_DATA_SUCCESS;
+    email: string;
+    name: string
+}
+
+export interface ILoginRequestFailed {
+    readonly type: typeof LOGIN_REQUEST_FAILED;
+}
+
+export interface IRegisterRequestFailed {
+    readonly type: typeof REGISTER_REQUEST_FAILED;
+}
+
+export interface ILogoutRequestFailed {
+    readonly type: typeof LOGOUT_REQUEST_FAILED;
+}
+
+export interface IUserDataRequestFailed {
+    readonly type: typeof GET_USER_DATA_FAILED;
+}
+
+export interface IUpdateDataRequestFailed {
+    readonly type: typeof UPDATE_USER_DATA_FAILED;
+}
+
+export type TRequests =
+    | ILoginRequestFailed
+    | IRegisterRequestFailed
+    | ILogoutRequestFailed
+    | IUserDataRequestFailed
+    | IUpdateDataRequestFailed
+    |ILoginRequest
+    |ILoginRequestSuccess
+    |IRegisterRequest
+    |IRegisterRequestSuccess
+    |ILogoutRequest
+    |ILogoutRequestSuccess
+    |IGetUserData
+    |IGetUserDataSuccess
+    |IUpdateUserData
+    |IUpdateUserDataSuccess
+
+
+export const logIn = ({ email, password }: IFormState): AppThunk => (dispatch)=> {
         dispatch({
             type: LOGIN_REQUEST,
         });
@@ -36,7 +119,7 @@ export const logIn = ({ email, password }) => {
                 password: password,
             }),
         })
-            .then(checkResponse)
+            .then(checkResponse<TLoginResponce>)
             .then(res => {
                 if (res && res.success) {
                     const authRefreshToken = res.refreshToken;
@@ -47,21 +130,18 @@ export const logIn = ({ email, password }) => {
                     if (authAccessToken) {
                         setCookie('accessToken', authAccessToken);
                     }
-                    dispatch({
+                    dispatch<ILoginRequestSuccess>({
                         type: LOGIN_REQUEST_SUCCESS,
                         email: res.user.email,
                         name: res.user.name,
                     })
                 } else {
                     dispatch(loginRequestFailed())
-                  
                 }
             }).catch(err => dispatch(loginRequestFailed()))
     }
-}
 
-export const register = ({ email, password, name }) => {
-    return function (dispatch) {
+export const register = ({ email, password, name }: IFormState): AppThunk => (dispatch) => {
         dispatch({
             type: REGISTER_REQUEST,
         });
@@ -76,7 +156,7 @@ export const register = ({ email, password, name }) => {
                 name: name,
             }),
         })
-            .then(checkResponse)
+            .then(checkResponse<TLoginResponce>)
             .then(res => {
                 if (res && res.success) {
                     dispatch({
@@ -97,10 +177,8 @@ export const register = ({ email, password, name }) => {
                 }
             }).catch(err => dispatch(registerRequestFailed()))
     }
-}
 
-export const logOut = () => {
-    return function (dispatch) {
+export const logOut = (): AppThunk => (dispatch)=> {
         dispatch({
             type: LOGOUT_REQUEST,
         });
@@ -113,7 +191,7 @@ export const logOut = () => {
                 token: getCookie('refreshToken')
             }),
         })
-            .then(checkResponse)
+            .then(checkResponse<TResetResponse>)
             .then((res) => {
                 if (res && res.success && res.message == "Successful logout") {
                     deleteCookie('refreshToken');
@@ -126,10 +204,8 @@ export const logOut = () => {
                 }
             }).catch(err => dispatch(logoutRequestFailed()))
     }
-}
 
-export const getUserData = () => {
-    return function (dispatch) {
+export const getUserData = (): AppThunk=> (dispatch) => {
         dispatch({
             type: GET_USER_DATA,
         });
@@ -141,7 +217,7 @@ export const getUserData = () => {
                 Authorization: 'Bearer ' + getCookie('accessToken')
             },
         })
-            .then(checkResponse)
+            .then(checkResponse<TUserResponce>)
             .then((res) => {
                 if (res && res.success) {
                     dispatch({
@@ -161,16 +237,12 @@ export const getUserData = () => {
                 console.log(err)
             })
     }
-}
 
-export const updateUserData = ({ email, password, name }) => {
-    return function (dispatch) {
+export const updateUserData = ({ email, password, name }: IFormState): AppThunk=>(dispatch) => {
         dispatch({
             type: UPDATE_USER_DATA,
-
         });
         const token = getCookie('refreshToken')
-
         fetch(`${baseUrl}/auth/user`, {
             method: 'PATCH',
             headers: {
@@ -183,7 +255,7 @@ export const updateUserData = ({ email, password, name }) => {
                 name: name
             }),
         })
-            .then(checkResponse)
+            .then(checkResponse<TUserResponce>)
             .then((res) => {
                 if (res && res.success) {
                     dispatch({
@@ -202,10 +274,8 @@ export const updateUserData = ({ email, password, name }) => {
                 console.log(err)
             })
     }
-}
 
-export const refreshToken = (afterRefresh) => {
-    return function (dispatch) {
+export const refreshToken = (afterRefresh: any): AppThunk=>(dispatch) => {
         fetch(`${baseUrl}/auth/token`, {
             method: 'post',
             headers: {
@@ -215,7 +285,7 @@ export const refreshToken = (afterRefresh) => {
                 token: getCookie('refreshToken')
             }),
         })
-            .then(checkResponse)
+            .then(checkResponse<TTokenResponce>)
             .then((res) => {
                 if (res && res.success) {
                     let authRefreshToken = res.refreshToken;
@@ -234,33 +304,32 @@ export const refreshToken = (afterRefresh) => {
                 console.log(err)
             })
     }
-}
 
-const loginRequestFailed = () =>{
+const loginRequestFailed = (): ILoginRequestFailed => {
     return {
         type: LOGIN_REQUEST_FAILED,
     }
 }
 
-const registerRequestFailed = () => {
+const registerRequestFailed = (): IRegisterRequestFailed => {
     return {
         type: REGISTER_REQUEST_FAILED,
     }
 }
 
-const logoutRequestFailed = () => {
+const logoutRequestFailed = (): ILogoutRequestFailed => {
     return {
         type: LOGOUT_REQUEST_FAILED,
     }
 }
 
-const userDataRequestFailed = () => {
+const userDataRequestFailed = (): IUserDataRequestFailed => {
     return {
         type: GET_USER_DATA_FAILED,
     }
 }
 
-const updateDataRequestFailed = () => {
+const updateDataRequestFailed = (): IUpdateDataRequestFailed => {
     return {
         type: UPDATE_USER_DATA_FAILED,
     }

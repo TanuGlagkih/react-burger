@@ -28,4 +28,58 @@ export interface IFormState {
 export type TResetResponse = {
     success: boolean;
     message: string;
-  }
+}
+
+export type TLoginResponce = {
+    accessToken: string,
+    refreshToken: string,
+    success: boolean,
+    user: {
+        email: string,
+        name: string
+    }
+}
+
+export type TUserResponce = {
+    success: boolean,
+    user: {
+        email: string,
+        name: string
+    }
+}
+
+export type TTokenResponce = {
+    accessToken: string,
+    refreshToken: string,
+    success: boolean
+}
+
+export type IOrderDetailsResponce = {
+    name: string,
+    order: { number: number },
+    number: number,
+    success: boolean
+}
+
+export type TDataResponce = {
+    data: Array<IIngredients>,
+    success: boolean
+}
+
+export type TOrderItem = {
+    ingredients: Array<string>,
+    _id: string,
+    status: string,
+    name: string,
+    number: number,
+    createdAt: string,
+    updatedAt: string,
+    key?: string,
+ }
+
+export type TwsMessage = {
+    success: boolean,
+    orders: Array<TOrderItem>,
+    total: number,
+    totalToday: number
+} 

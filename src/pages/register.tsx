@@ -1,15 +1,14 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { getUserData, register } from '../services/actions/requests';
+import { useDispatch, useSelector } from '../services/types';
 import { IFormState } from '../utils/types';
 import styles from './pages.module.css'
 
 export function RegisterPage() {
     const [form, setValue] = useState<IFormState>({ name: '', email: '', password: '' });
     const dispatch = useDispatch();
-    //@ts-ignore
     const { isAuth } = useSelector(state => state.requests)
 
     const onChange = (e: React.ChangeEvent) => {
@@ -17,14 +16,12 @@ export function RegisterPage() {
     };
 
     useEffect(() => {
-        //@ts-ignore
         dispatch(getUserData())
     }, [])
 
     let onClick = useCallback(
         (e: React.FormEvent) => {
             e.preventDefault();
-            //@ts-ignore
             dispatch(register(form));
         },
         [form]

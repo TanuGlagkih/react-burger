@@ -14,8 +14,16 @@ import {
     UPDATE_USER_DATA,
     UPDATE_USER_DATA_FAILED,
     UPDATE_USER_DATA_SUCCESS
-} from "../actions/requests";
+} from "../constants";
+import { TActions } from "../types";
 
+export type TInitialUserState = {
+    email: string,
+    name: string,
+    requesting: boolean,
+    success: boolean,
+    isAuth: boolean
+}
 const initialUserState = {
     email: '',
     name: '',
@@ -24,7 +32,7 @@ const initialUserState = {
     isAuth: false
 }
 
-export const requestsReducer = (state = initialUserState, action) => {
+export const requestsReducer = (state = initialUserState, action: TActions): TInitialUserState => {
     switch (action.type) {
         case LOGIN_REQUEST: {
             return {

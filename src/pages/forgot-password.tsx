@@ -1,15 +1,14 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { getUserData } from '../services/actions/requests';
 import { baseUrl, checkResponse } from '../services/API';
+import { useDispatch, useSelector } from '../services/types';
 import { TResetResponse } from '../utils/types';
 import styles from './pages.module.css';
 
 export function ForgotPasswordPage() {
   const [form, setValue] = useState<string>('');
-  // @ts-ignore
   const { isAuth } = useSelector(state => state.requests)
   const dispatch = useDispatch();
   const history = useHistory();
@@ -20,7 +19,6 @@ export function ForgotPasswordPage() {
   };
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(getUserData())
   }, [])
 

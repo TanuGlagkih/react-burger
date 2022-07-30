@@ -1,14 +1,13 @@
-import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
+import { useSelector } from '../../services/types';
 
 interface IProtectedRoute {
     children?: JSX.Element,
-    path?: any,
+    path?: string,
     exact?: boolean,
 }
 
 export function ProtectedRoute({ children, ...rest }: IProtectedRoute) {
-    //@ts-ignore
     const { isAuth } = useSelector(state => state.requests)
 
     return (

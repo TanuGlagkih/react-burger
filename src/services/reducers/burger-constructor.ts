@@ -1,5 +1,5 @@
+import { IIngredients } from "../../utils/types";
 import {
-    ADD_INGREDIENT,
     ADD_INGREDIENT_SUCCESS,
     ADD_INGREDIENT_FAILED,
     ADD_BUN,
@@ -7,19 +7,22 @@ import {
     ADD_BUN_FAILED,
     REMOVE_INGREDIENT,
     REPLASE_INGREDIENTS,
-    NEW_ORDER
-} from "../actions/burger-constructor";
+    NEW_ORDER,
+} from "../constants";
+import { TActions } from "../types";
 
-const initialBurgerState = {
+export type TInitialBurgerState = {
+    buns: null | IIngredients,
+    ingredients: Array<IIngredients>,
+}
+
+const initialBurgerState: TInitialBurgerState = {
     buns: null,
     ingredients: [],
 }
 
-export const constructorReducer = (state = initialBurgerState, action) => {
+export const constructorReducer = (state = initialBurgerState, action: TActions): TInitialBurgerState => {
     switch (action.type) {
-        case ADD_INGREDIENT: {
-            return { ...state }
-        }
         case ADD_INGREDIENT_SUCCESS: {
             return {
                 ...state,
