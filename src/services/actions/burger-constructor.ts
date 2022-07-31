@@ -78,7 +78,7 @@ export const addBun = (item: IIngredients): AppThunk => (dispatch) => {
             }
         }
 
-export function moveCard(dragIndex: number, hoverIndex: number) {
+export function moveCard(dragIndex: number, hoverIndex: number): IMoveCard {
     return {
             type: REPLASE_INGREDIENTS,
             dragIndex,

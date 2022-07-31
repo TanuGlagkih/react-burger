@@ -1,8 +1,18 @@
 import { Feed } from "../components/feed/feed";
 import styles from './pages.module.css'
 import { FeedStatistics } from "../components/feed-statistics/feed-statistics";
+import { useDispatch } from "../services/types";
+import { useEffect } from "react";
 
 export const FeedPage = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({ type: 'WS_CONNECTION_START' });
+        return () => {
+            dispatch({ type: 'WS_DISCONNECT' })
+        }
+    }, [])
 
     return (
         <>

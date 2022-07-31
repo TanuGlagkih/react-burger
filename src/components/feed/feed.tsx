@@ -29,8 +29,8 @@ export const FeedItem = ({ order, id }: IFeedIteem) => {
     }, [orderItems])
 
     const linkTo = (location.pathname === '/profile/orders') ?
-        (`/profile/orders/${order._id}`) :
-        (`/feed/${order._id}`);
+        (`/profile/orders/${order.number}`) :
+        (`/feed/${order.number}`);
 
     const statusText = useMemo(() => {
         return order?.status === 'pending' ?
@@ -55,7 +55,7 @@ export const FeedItem = ({ order, id }: IFeedIteem) => {
                         <span className="text text_type_main-default text_color_inactive">{dateTime(order.createdAt)}</span>
                     </p>
                     <p className='text text_type_main-medium mt-6'>{order.name}</p>
-                    {linkTo === `/profile/orders/${order._id}` ?
+                    {linkTo === `/profile/orders/${order.number}` ?
                         <p className={`${styles.status} text text_type_main-small mb-8}`}>{statusText}</p>
                         :
                         <></>}

@@ -16,7 +16,8 @@ export interface IIngredients {
 }
 
 export type TIngredientDetailsProps = {
-    modal: boolean,
+    modal?: boolean,
+    orderProps?: TOrderItem | null
 };
 
 export interface IFormState {
@@ -69,17 +70,24 @@ export type TDataResponce = {
 export type TOrderItem = {
     ingredients: Array<string>,
     _id: string,
+    owner?: string,
     status: string,
     name: string,
     number: number,
     createdAt: string,
     updatedAt: string,
     key?: string,
+    __v?: number,
  }
 
 export type TwsMessage = {
     success: boolean,
     orders: Array<TOrderItem>,
-    total: number,
-    totalToday: number
+    total?: number,
+    totalToday?: number
 } 
+
+export type TOneOrderResponce = {
+    success: boolean,
+    orders: Array<TOrderItem>,
+    }

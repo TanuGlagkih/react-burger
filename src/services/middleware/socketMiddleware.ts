@@ -11,6 +11,8 @@ import {
     WS_CONNECTION_START_PROTECTED,
     WS_CONNECTION_SUCCESS_PROTECTED,
     WS_GET_MESSAGE_PROTECTED,
+    WS_DISCONNECT,
+    WS_DISCONNECT_PROTECTED,
 } from '../constants/wsActionTypes';
 import type { AppDispatch, RootState } from '../types';
 import { getCookie } from '../utils';
@@ -32,7 +34,7 @@ export interface IwsGetMessage {
 
 export interface IwsConnectionClose {
     readonly type: typeof WS_CONNECTION_CLOSED;
-    payload: Event;
+    payload?: Event;
 }
 
 export interface IwsConnectionStart {
@@ -56,11 +58,19 @@ export interface IwsAuthGetMessage {
 
 export interface IwsAuthConnectionClose {
     readonly type: typeof WS_CONNECTION_CLOSED_PROTECTED;
-    payload: Event;
+    payload?: Event;
 }
 
 export interface IwsAuthConnectionStart {
     readonly type: typeof WS_CONNECTION_START_PROTECTED;
+}
+
+export interface IwsDisconnect {
+    readonly type: typeof WS_DISCONNECT;
+}
+
+export interface IwsAuthDisconnect {
+    readonly type: typeof WS_DISCONNECT_PROTECTED;
 }
 
 export type TSoketMiddleware =
@@ -74,6 +84,8 @@ export type TSoketMiddleware =
     | IwsAuthGetMessage
     | IwsAuthConnectionClose
     | IwsAuthConnectionStart
+    | IwsDisconnect
+    | IwsAuthDisconnect
 
 export const socketMiddleware = (): Middleware => {
     return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
@@ -84,9 +96,11 @@ export const socketMiddleware = (): Middleware => {
             const { dispatch, getState } = store;
             const { type, payload } = action;
 
+
             if (type === 'WS_CONNECTION_START') {
                 socket = new WebSocket('wss://norma.nomoreparties.space/orders/all');
             }
+
             if (socket) {
                 socket.onopen = event => {
                     dispatch({ type: 'WS_CONNECTION_SUCCESS', payload: event });
@@ -102,7 +116,12 @@ export const socketMiddleware = (): Middleware => {
                 };
                 socket.onclose = event => {
                     dispatch({ type: 'WS_CONNECTION_CLOSED', payload: event });
+                    console.log('closed')
                 };
+                if (type === 'WS_DISCONNECT') {
+                    socket.close()
+                    socket = null;
+                }
             }
 
             if (type === 'WS_CONNECTION_START_PROTECTED') {
@@ -125,7 +144,12 @@ export const socketMiddleware = (): Middleware => {
                 };
                 socketForAuthUser.onclose = event => {
                     dispatch({ type: 'WS_CONNECTION_CLOSED_PROTECTED', payload: event });
+                    console.log('closed')
                 };
+                if (type === 'WS_DISCONNECT_PROTECTED') {
+                    socketForAuthUser.close()
+                    socket = null;
+                }
             }
             next(action);
         };

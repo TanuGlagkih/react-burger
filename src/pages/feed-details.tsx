@@ -6,18 +6,20 @@ import { dateTime } from '../utils/data-time'
 import { IIngredients, TIngredientDetailsProps, TOrderItem } from '../utils/types'
 import styles from './pages.module.css'
 
-export const FeedDetails = ({ modal }: TIngredientDetailsProps) => {
+export const FeedDetails = ({ modal, orderProps }: TIngredientDetailsProps) => {
     const location = useLocation();
-    const { id } = useParams<{ id?: string }>();
+    const { id } = useParams<{ id?: any }>();
     const { items } = useSelector(state => state.burger);
-    const { authMessages, messages } = useSelector(state => state.allSocket)
+    var { authMessages, messages } = useSelector(state => state.allSocket);
 
     var orders = location.pathname === `/profile/orders/${id}` ?
         authMessages?.orders
         :
         messages?.orders
 
-    const order = orders?.find((order: TOrderItem) => order._id == `${id}`);
+    var order = orderProps ? orderProps
+        :
+        orders?.find((order: TOrderItem) => order.number == id)
 
     const orderItems: Array<IIngredients> = items.reduce((acc: Array<IIngredients>, item) => {
         if (order?.ingredients.includes(item._id)) acc.push(item);
@@ -37,7 +39,7 @@ export const FeedDetails = ({ modal }: TIngredientDetailsProps) => {
                 "Выполнен" : "Создан"
     }, [order])
 
-    if (!items || !orders) return <h1 className='text text_type_main-medium mt-6 ml-6'> Загрузка...</h1>
+    if (!order) return <h1 className='text text_type_main-medium mt-6 ml-6'> Загрузка...</h1>
 
     return (
         <div className={styles.mainBox}>

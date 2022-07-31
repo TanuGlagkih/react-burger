@@ -93,217 +93,216 @@ export type TRequests =
     | ILogoutRequestFailed
     | IUserDataRequestFailed
     | IUpdateDataRequestFailed
-    |ILoginRequest
-    |ILoginRequestSuccess
-    |IRegisterRequest
-    |IRegisterRequestSuccess
-    |ILogoutRequest
-    |ILogoutRequestSuccess
-    |IGetUserData
-    |IGetUserDataSuccess
-    |IUpdateUserData
-    |IUpdateUserDataSuccess
+    | ILoginRequest
+    | ILoginRequestSuccess
+    | IRegisterRequest
+    | IRegisterRequestSuccess
+    | ILogoutRequest
+    | ILogoutRequestSuccess
+    | IGetUserData
+    | IGetUserDataSuccess
+    | IUpdateUserData
+    | IUpdateUserDataSuccess
 
 
-export const logIn = ({ email, password }: IFormState): AppThunk => (dispatch)=> {
-        dispatch({
-            type: LOGIN_REQUEST,
-        });
-        fetch(`${baseUrl}/auth/login`, {
-            method: 'post',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        })
-            .then(checkResponse<TLoginResponce>)
-            .then(res => {
-                if (res && res.success) {
-                    const authRefreshToken = res.refreshToken;
-                    if (authRefreshToken) {
-                        setCookie('refreshToken', authRefreshToken);
-                    }
-                    const authAccessToken = res.accessToken.split('Bearer ')[1];
-                    if (authAccessToken) {
-                        setCookie('accessToken', authAccessToken);
-                    }
-                    dispatch<ILoginRequestSuccess>({
-                        type: LOGIN_REQUEST_SUCCESS,
-                        email: res.user.email,
-                        name: res.user.name,
-                    })
-                } else {
-                    dispatch(loginRequestFailed())
+export const logIn = ({ email, password }: IFormState): AppThunk => (dispatch) => {
+    dispatch({
+        type: LOGIN_REQUEST,
+    });
+    fetch(`${baseUrl}/auth/login`, {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password,
+        }),
+    })
+        .then(checkResponse<TLoginResponce>)
+        .then(res => {
+            if (res && res.success) {
+                const authRefreshToken = res.refreshToken;
+                if (authRefreshToken) {
+                    setCookie('refreshToken', authRefreshToken);
                 }
-            }).catch(err => dispatch(loginRequestFailed()))
-    }
+                const authAccessToken = res.accessToken.split('Bearer ')[1];
+                if (authAccessToken) {
+                    setCookie('accessToken', authAccessToken);
+                }
+                dispatch<ILoginRequestSuccess>({
+                    type: LOGIN_REQUEST_SUCCESS,
+                    email: res.user.email,
+                    name: res.user.name,
+                })
+            } else {
+                dispatch(loginRequestFailed())
+            }
+        }).catch(err => dispatch(loginRequestFailed()))
+}
 
 export const register = ({ email, password, name }: IFormState): AppThunk => (dispatch) => {
-        dispatch({
-            type: REGISTER_REQUEST,
-        });
-        fetch(`${baseUrl}/auth/register`, {
-            method: 'post',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                name: name,
-            }),
-        })
-            .then(checkResponse<TLoginResponce>)
-            .then(res => {
-                if (res && res.success) {
-                    dispatch({
-                        type: REGISTER_REQUEST_SUCCESS,
-                        email: res.user.email,
-                        name: res.user.name,
-                    })
-                    let authRefreshToken = res.refreshToken;
-                    if (authRefreshToken) {
-                        setCookie('refreshToken', authRefreshToken);
-                    }
-                    let authAccessToken = res.accessToken.split('Bearer ')[1];
-                    if (authAccessToken) {
-                        setCookie('accessToken', authAccessToken);
-                    }
-                } else {
-                    dispatch(registerRequestFailed())
+    dispatch({
+        type: REGISTER_REQUEST,
+    });
+    fetch(`${baseUrl}/auth/register`, {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password,
+            name: name,
+        }),
+    })
+        .then(checkResponse<TLoginResponce>)
+        .then(res => {
+            if (res && res.success) {
+                dispatch({
+                    type: REGISTER_REQUEST_SUCCESS,
+                    email: res.user.email,
+                    name: res.user.name,
+                })
+                let authRefreshToken = res.refreshToken;
+                if (authRefreshToken) {
+                    setCookie('refreshToken', authRefreshToken);
                 }
-            }).catch(err => dispatch(registerRequestFailed()))
-    }
+                let authAccessToken = res.accessToken.split('Bearer ')[1];
+                if (authAccessToken) {
+                    setCookie('accessToken', authAccessToken);
+                }
+            } else {
+                dispatch(registerRequestFailed())
+            }
+        }).catch(err => dispatch(registerRequestFailed()))
+}
 
-export const logOut = (): AppThunk => (dispatch)=> {
-        dispatch({
-            type: LOGOUT_REQUEST,
-        });
-        fetch(`${baseUrl}/auth/logout`, {
-            method: 'post',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                token: getCookie('refreshToken')
-            }),
-        })
-            .then(checkResponse<TResetResponse>)
-            .then((res) => {
-                if (res && res.success && res.message == "Successful logout") {
-                    deleteCookie('refreshToken');
-                    deleteCookie('accessToken');
-                    dispatch({
-                        type: LOGOUT_REQUEST_SUCCESS,
-                    })
-                } else {
-                    dispatch(logoutRequestFailed())
-                }
-            }).catch(err => dispatch(logoutRequestFailed()))
-    }
+export const logOut = (): AppThunk => (dispatch) => {
+    dispatch({
+        type: LOGOUT_REQUEST,
+    });
+    fetch(`${baseUrl}/auth/logout`, {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            token: getCookie('refreshToken')
+        }),
+    })
+        .then(checkResponse<TResetResponse>)
+        .then((res) => {
+            if (res && res.success && res.message == "Successful logout") {
+                deleteCookie('refreshToken');
+                deleteCookie('accessToken');
+                dispatch({
+                    type: LOGOUT_REQUEST_SUCCESS,
+                })
+            } else {
+                dispatch(logoutRequestFailed())
+            }
+        }).catch(err => dispatch(logoutRequestFailed()))
+}
 
-export const getUserData = (): AppThunk=> (dispatch) => {
-        dispatch({
-            type: GET_USER_DATA,
-        });
-        const token = getCookie('refreshToken')
-        fetch(`${baseUrl}/auth/user`, {
-            method: 'get',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-                Authorization: 'Bearer ' + getCookie('accessToken')
-            },
-        })
-            .then(checkResponse<TUserResponce>)
-            .then((res) => {
-                if (res && res.success) {
-                    dispatch({
-                        type: GET_USER_DATA_SUCCESS,
-                        email: res.user.email,
-                        name: res.user.name,
-                    })
-                } else {
-                    dispatch(userDataRequestFailed());
-                }
-            }).catch(err => {
-                if (token) {
-                    console.log(10);
-                    dispatch(refreshToken(getUserData()))
-                }
+export const getUserData = (): AppThunk => (dispatch) => {
+    dispatch({
+        type: GET_USER_DATA,
+    });
+    const token = getCookie('refreshToken')
+    fetch(`${baseUrl}/auth/user`, {
+        method: 'get',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: 'Bearer ' + getCookie('accessToken')
+        },
+    })
+        .then(checkResponse<TUserResponce>)
+        .then((res) => {
+            if (res && res.success) {
+                dispatch({
+                    type: GET_USER_DATA_SUCCESS,
+                    email: res.user.email,
+                    name: res.user.name,
+                })
+            } else {
                 dispatch(userDataRequestFailed());
-                console.log(err)
-            })
-    }
-
-export const updateUserData = ({ email, password, name }: IFormState): AppThunk=>(dispatch) => {
-        dispatch({
-            type: UPDATE_USER_DATA,
-        });
-        const token = getCookie('refreshToken')
-        fetch(`${baseUrl}/auth/user`, {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-                Authorization: 'Bearer ' + getCookie('accessToken')
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                name: name
-            }),
+            }
+        }).catch(err => {
+            if (token) {
+                dispatch(refreshToken(getUserData()))
+            }
+            dispatch(userDataRequestFailed());
+            console.log(err)
         })
-            .then(checkResponse<TUserResponce>)
-            .then((res) => {
-                if (res && res.success) {
-                    dispatch({
-                        type: UPDATE_USER_DATA_SUCCESS,
-                        email: res.user.email,
-                        name: res.user.name,
-                    })
-                } else {
-                    dispatch(updateDataRequestFailed());
-                }
-            }).catch(err => {
-                if (token) {
-                    dispatch(refreshToken(updateUserData({ email, password, name })))
-                }
+}
+
+export const updateUserData = ({ email, password, name }: IFormState): AppThunk => (dispatch) => {
+    dispatch({
+        type: UPDATE_USER_DATA,
+    });
+    const token = getCookie('refreshToken')
+    fetch(`${baseUrl}/auth/user`, {
+        method: 'PATCH',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: 'Bearer ' + getCookie('accessToken')
+        },
+        body: JSON.stringify({
+            email: email,
+            password: password,
+            name: name
+        }),
+    })
+        .then(checkResponse<TUserResponce>)
+        .then((res) => {
+            if (res && res.success) {
+                dispatch({
+                    type: UPDATE_USER_DATA_SUCCESS,
+                    email: res.user.email,
+                    name: res.user.name,
+                })
+            } else {
                 dispatch(updateDataRequestFailed());
-                console.log(err)
-            })
-    }
-
-export const refreshToken = (afterRefresh: any): AppThunk=>(dispatch) => {
-        fetch(`${baseUrl}/auth/token`, {
-            method: 'post',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({
-                token: getCookie('refreshToken')
-            }),
+            }
+        }).catch(err => {
+            if (token) {
+                dispatch(refreshToken(updateUserData({ email, password, name })))
+            }
+            dispatch(updateDataRequestFailed());
+            console.log(err)
         })
-            .then(checkResponse<TTokenResponce>)
-            .then((res) => {
-                if (res && res.success) {
-                    let authRefreshToken = res.refreshToken;
-                    if (authRefreshToken) {
-                        setCookie('refreshToken', authRefreshToken);
-                    }
-                    let authAccessToken = res.accessToken.split('Bearer ')[1];
-                    if (authAccessToken) {
-                        setCookie('accessToken', authAccessToken);
-                    }
-                    dispatch(afterRefresh)
-                } else {
-                    throw new Error
+}
+
+export const refreshToken = (afterRefresh: any): AppThunk => (dispatch) => {
+    fetch(`${baseUrl}/auth/token`, {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify({
+            token: getCookie('refreshToken')
+        }),
+    })
+        .then(checkResponse<TTokenResponce>)
+        .then((res) => {
+            if (res && res.success) {
+                let authRefreshToken = res.refreshToken;
+                if (authRefreshToken) {
+                    setCookie('refreshToken', authRefreshToken);
                 }
-            }).catch(err => {
-                console.log(err)
-            })
-    }
+                let authAccessToken = res.accessToken.split('Bearer ')[1];
+                if (authAccessToken) {
+                    setCookie('accessToken', authAccessToken);
+                }
+                dispatch(afterRefresh)
+            } else {
+                throw new Error
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+}
 
 const loginRequestFailed = (): ILoginRequestFailed => {
     return {

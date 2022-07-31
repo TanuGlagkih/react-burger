@@ -125,7 +125,7 @@ const OrderElement = () => {
   const { buns } = useSelector(state => state.product);
   const { isAuth } = useSelector(state => state.requests);
   const dispatch = useDispatch();
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState<boolean>(false);
   const location = useLocation();
   const history = useHistory()
 

@@ -15,6 +15,9 @@ export function ProfilePage() {
 
     useEffect(() => {
         dispatch({ type: 'WS_CONNECTION_START_PROTECTED' })
+        return () => {
+            dispatch({ type: 'WS_DISCONNECT_PROTECTED' })
+        }
     }, [])
 
     return (
@@ -83,7 +86,7 @@ export function Profile() {
     const [form, setValue] = useState<IFormState>({ name: '', email: '', password: '' });
     const { email, name } = useSelector(state => state.requests);
     const dispatch = useDispatch();
-    const [isBtnsVisible, setBtnsVisible] = useState(false)
+    const [isBtnsVisible, setBtnsVisible] = useState<boolean>(false)
 
     const onChange = (e: React.ChangeEvent) => {
         setValue({ ...form, [(e.target as HTMLFormElement).name]: (e.target as HTMLFormElement).value });

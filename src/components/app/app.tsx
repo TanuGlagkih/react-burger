@@ -16,6 +16,7 @@ import { getItems } from '../../services/actions/burger-ingredients';
 import { Location } from 'history';
 import { FeedPage } from '../../pages/feed';
 import { FeedDetails } from '../../pages/feed-details';
+import { FeedDetailsPage } from '../../pages/feed-details-page';
 
 function App() {
   const dispatch = useDispatch();
@@ -24,10 +25,6 @@ function App() {
 
   useEffect(() => {
     dispatch(getItems())
-  }, [])
-
-  useEffect(() => {
-    dispatch({ type: 'WS_CONNECTION_START' })
   }, [])
 
   const background = location.state && location.state.background;
@@ -61,7 +58,7 @@ function App() {
           <IngredientDetails modal={false} />
         </Route>
         <Route path='/feed/:id'>
-          <FeedDetails modal={false} />
+          <FeedDetailsPage modal={false} />
         </Route>
         <Route path='/feed' >
           <FeedPage />
@@ -80,12 +77,12 @@ function App() {
       </Route>}
       {background && <Route path="/feed/:id" >
         <Modal active={active} setActive={setActive} back={true}>
-          <FeedDetails modal={true} />
+          <FeedDetails modal={true} orderProps={null} />
         </Modal>
       </Route>}
       {background && <ProtectedRoute path="/profile/orders/:id" >
         <Modal active={active} setActive={setActive} back={true}>
-          <FeedDetails modal={true} />
+          <FeedDetails modal={true} orderProps={null}/>
         </Modal>
       </ProtectedRoute>}
     </>

@@ -137,7 +137,7 @@ const Ingredients = ({ setCurrent }: IMenuItemsProps) => {
 
 const BurgerIngredients = () => {
 
-  const [current, setCurrent] = useState('bun')
+  const [current, setCurrent] = useState<string>('bun')
 
   return (
     <div className={styles.burgerIngredients}>

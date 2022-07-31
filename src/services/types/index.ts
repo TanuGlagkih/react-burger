@@ -11,7 +11,7 @@ import {
   useDispatch as dispatchHook,
   useSelector as selectorHook
 } from 'react-redux';
-import { TSoketMiddleware } from "../actions/socketMiddleware";
+import { TSoketMiddleware } from "../middleware/socketMiddleware";
 
 export type RootState = ReturnType<typeof store.getState>; 
 
