@@ -1,44 +1,70 @@
-import { Button, EmailInput, Input, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, Switch, useHistory } from 'react-router-dom'
+import { NavLink, Switch, useHistory, useLocation } from 'react-router-dom'
+import { Feed } from '../components/feed/feed';
 import { ProtectedRoute } from '../components/protected-route/protected-route';
 import { logOut, getUserData, updateUserData } from '../services/actions/requests';
+import { useDispatch, useSelector } from '../services/types';
 import { getCookie } from '../services/utils';
 import { IFormState } from '../utils/types';
+import { FeedDetails } from './feed-details';
 import styles from './pages.module.css'
 
 export function ProfilePage() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({ type: 'WS_CONNECTION_START_PROTECTED' })
+        return () => {
+            dispatch({ type: 'WS_DISCONNECT_PROTECTED' })
+        }
+    }, [])
+
     return (
-        <div className={styles.profile}>
-            <NavBar />
+        <>
             <Switch>
                 <ProtectedRoute path='/profile' exact>
-                    <Profile />
+                    <div className={styles.profile}>
+                        <NavBar />
+                        <Profile />
+                    </div>
                 </ProtectedRoute>
                 <ProtectedRoute path='/profile/orders' exact>
-                    <Orders />
+                    <div className={styles.profile}>
+                        <NavBar />
+                        <Orders />
+                    </div>
+                </ProtectedRoute>
+                <ProtectedRoute path='/profile/orders/:id'>
+                    <FeedDetails modal={false} />
                 </ProtectedRoute>
             </Switch>
-        </div>
+        </>
     )
 }
 
-function NavBar() {
+export function NavBar() {
     const dispatch = useDispatch();
     const token = getCookie('refreshToken');
     const history = useHistory();
+    const location = useLocation()
 
     const logout = useCallback(
         (e: React.MouseEvent) => {
             e.preventDefault();
-            //@ts-ignore
             dispatch(logOut());
             if (!token) {
                 history.push('/login')
             }
         },
         []);
+
+    const textContent = location.pathname === '/profile/orders' ?
+        <p className="text text_type_main-default text_color_inactive mt-20">
+            В этом разделе вы можете посмотреть <br /> свою историю заказов</p>
+        :
+        <p className="text text_type_main-default text_color_inactive mt-20">
+            В этом разделе вы можете изменить <br /> свои персональные данные</p>
 
     return (
         <div className={styles.bar}>
@@ -51,17 +77,16 @@ function NavBar() {
             <a onClick={logout} className={`${styles.a} text text_type_main-medium text_color_inactive mb-8 `} >
                 Выход
             </a>
-            <p className="text text_type_main-default text_color_inactive mt-20"> В этом разделе вы можете изменить <br /> свои персональные данные</p>
+            {textContent}
         </div>
     )
 }
 
-function Profile() {
+export function Profile() {
     const [form, setValue] = useState<IFormState>({ name: '', email: '', password: '' });
-    //@ts-ignore
     const { email, name } = useSelector(state => state.requests);
     const dispatch = useDispatch();
-    const [isBtnsVisible, setBtnsVisible] = useState(false)
+    const [isBtnsVisible, setBtnsVisible] = useState<boolean>(false)
 
     const onChange = (e: React.ChangeEvent) => {
         setValue({ ...form, [(e.target as HTMLFormElement).name]: (e.target as HTMLFormElement).value });
@@ -76,13 +101,11 @@ function Profile() {
     const change = useCallback(
         (e: React.FormEvent) => {
             e.preventDefault();
-            //@ts-ignore
             dispatch(updateUserData(form));
             setBtnsVisible(false)
         }, [])
 
     useEffect(() => {
-        //@ts-ignore
         dispatch(getUserData());
     }, [])
 
@@ -121,10 +144,10 @@ function Profile() {
     )
 }
 
-function Orders() {
+export function Orders() {
     return (
         <div className={styles.box}>
-
+            <Feed />
         </div>
     )
 }

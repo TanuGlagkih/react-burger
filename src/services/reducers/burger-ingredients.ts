@@ -1,3 +1,4 @@
+import { IIngredients } from "../../utils/types";
 import {
     BURGER_INGREDIENTS_REQUEST,
     BURGER_INGREDIENTS_REQUEST_FAILED,
@@ -6,16 +7,22 @@ import {
     OTHER_INGREDIENTS_INCREASER,
     INGREDIENT_COUNTER_DECREASE,
     CLEAR_COUNTER
-} from "../actions/burger-ingredients";
+} from "../constants";
+import { TActions } from "../types";
 
-const initialIngredientsListState = {
+export type TInitialIngredientsListState = {
+    items: Array<IIngredients>,
+    ingredientsRequest: boolean,
+    ingredientsRequestFailed: boolean,
+}
+
+const initialIngredientsListState: TInitialIngredientsListState = {
     items: [],
-
     ingredientsRequest: false,
     ingredientsRequestFailed: false,
 }
 
-export const burgerReducer = (state = initialIngredientsListState, action) => {
+export const burgerReducer = (state = initialIngredientsListState, action: TActions): TInitialIngredientsListState => {
     switch (action.type) {
         case BURGER_INGREDIENTS_REQUEST: {
             return {
@@ -41,8 +48,8 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
         case BUN_INCREASER: {
             return {
                 ...state,
-                items: [...state.items].map((item) =>
-                    item.type === 'bun'
+                items: [...state.items].map((item: IIngredients) =>
+                 item.type === 'bun'
                         ?
                         item._id === action.id ?
                             { ...item, __v: 1 }
@@ -56,7 +63,7 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
         case OTHER_INGREDIENTS_INCREASER: {
             return {
                 ...state,
-                items: [...state.items].map((item) =>
+                items: [...state.items].map((item: IIngredients) =>
                     (item.type === 'sauce' || item.type === 'main') && item._id === action.id
                         ?
                         { ...item, __v: ++item.__v }
@@ -68,13 +75,13 @@ export const burgerReducer = (state = initialIngredientsListState, action) => {
         case INGREDIENT_COUNTER_DECREASE: {
             return {
                 ...state,
-                items: [...state.items].map((item) => item._id === action.id ? { ...item, __v: --item.__v } : item)
+                items: [...state.items].map((item: IIngredients) => item._id === action.id ? { ...item, __v: --item.__v } : item)
             }
         }
         case CLEAR_COUNTER: {
             return {
                 ...state,
-                items: [...state.items].map((item) => item._v !== 0 ? { ...item, __v: 0} : item)
+                items: [...state.items].map((item: IIngredients) => item.__v !== 0 ? { ...item, __v: 0} : item)
             }
         }
         default: {

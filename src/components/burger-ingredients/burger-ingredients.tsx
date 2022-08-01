@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Counter, CurrencyIcon, Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-ingredients.module.css'
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { useDrag } from 'react-dnd';
 import { IIngredients } from '../../utils/types';
+import { useSelector } from '../../services/types/index';
 
 interface IMenuItemsProps {
   current: string,
@@ -58,7 +58,7 @@ const Item = ({ item }: IItemProps) => {
   });
 
   return (
-    < >
+    <>
       <Link
         key={item._id}
         to={{
@@ -99,8 +99,7 @@ const Ingredients = ({ setCurrent }: IMenuItemsProps) => {
         setCurrent('sauce');
   }
 
-  //@ts-ignore
-  const { items } = useSelector(state => state.burger); 
+    const { items } = useSelector(state => state.burger); 
 
   return (
     <div onScroll={getCords} className={styles.container}>
@@ -138,7 +137,7 @@ const Ingredients = ({ setCurrent }: IMenuItemsProps) => {
 
 const BurgerIngredients = () => {
 
-  const [current, setCurrent] = useState('bun')
+  const [current, setCurrent] = useState<string>('bun')
 
   return (
     <div className={styles.burgerIngredients}>

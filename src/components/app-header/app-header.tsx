@@ -23,7 +23,7 @@ const AppHeader = () => {
             <div className={styles.icon}>
               <ListIcon type="secondary" />
             </div>
-            <NavLink to='/order' className={`${styles.link} text text_type_main-default text_color_inactive`} activeClassName={styles.active}>
+            <NavLink to='/feed' className={`${styles.link} text text_type_main-default text_color_inactive`} activeClassName={styles.active}>
               Лента заказов
             </NavLink>
           </div>

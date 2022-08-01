@@ -1,0 +1,39 @@
+.box {
+    width: 450px;
+}
+
+.orders {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 250px;
+    color: aqua;
+}
+
+.lists {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-height: 250px;
+}
+
+.item {
+    margin-right: 20px;
+}
+
+.item:nth-child(n+18) {
+    display: none;
+}
+
+ul {
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none;
+    width: fit-content;
+}

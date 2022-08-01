@@ -1,10 +1,9 @@
 import React from 'react';
 import styles from './order-details.module.css';
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/types';
 
 const OrderDetails = () => {
-    // @ts-ignore
     const { orderNumber, showOrderDetails, customMessage } = useSelector(state => state.order)
 
     return (

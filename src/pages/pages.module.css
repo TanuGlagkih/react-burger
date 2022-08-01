@@ -31,23 +31,118 @@
     margin-right: 5vw;
 }
 
-.link{
-    text-decoration:none;
+.link {
+    text-decoration: none;
 }
 
-.a{
-    text-decoration:none;
+.a {
+    text-decoration: none;
     cursor: pointer;
 }
 
-.active{
+.h {
+    margin-left: 10vw;
+}
+
+.active {
     color: white;
 }
 
-.not_found{
+.not_found {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin-top: 10vh;
+}
+
+.feed {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    margin-top: 2vh;
+    margin-left: 10vw;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    justify-content: space-between;
+    height: 480px;
+}
+
+.mainBox {
+    display: flex;
+    justify-content: center;
+}
+
+.detailsBox {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    width: 500px;
+    height: 550px;
+    justify-content: space-between;
+}
+
+.number {
+    text-align: center;
+}
+
+.text {
+    max-height: 90px;
+    overflow-y: auto;
+}
+
+.status {
+    color: aqua;
+}
+
+
+.ingrList {
+    text-decoration: none;
+    overflow-y: scroll;
+    height: 170px;
+    background-color: rgb(38, 38, 46);
+    border-radius: 10px;
+    width: 480px;
+}
+
+.ingrItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    min-width: 100px;
+    white-space: nowrap;
+}
+
+.img {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    border-style: ridge;
+    border-color: royalblue;
+    border-width: 3px;
+    object-fit: cover;
+    background-color: black;
+    margin-right: 16px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
 }

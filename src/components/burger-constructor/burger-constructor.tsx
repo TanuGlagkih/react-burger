@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './burger-constructor.module.css'
-import { useDispatch, useSelector } from 'react-redux';
 import { orderDetails } from '../../services/actions/order-details';
 import { useDrag, useDrop } from 'react-dnd';
-import { addBun, addIngredients, moveCard, NEW_ORDER, REMOVE_INGREDIENT } from '../../services/actions/burger-constructor';
+import { addBun, addIngredients, moveCard } from '../../services/actions/burger-constructor';
 import { v4 as uuidv4 } from 'uuid';
-import { CLEAR_COUNTER, ingredientCounterIncrease, INGREDIENT_COUNTER_DECREASE } from '../../services/actions/burger-ingredients';
+import { ingredientCounterIncrease } from '../../services/actions/burger-ingredients';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 import { useHistory, useLocation } from 'react-router-dom';
 import { IIngredients } from '../../utils/types';
+import { CLEAR_COUNTER, INGREDIENT_COUNTER_DECREASE, NEW_ORDER, REMOVE_INGREDIENT } from '../../services/constants';
+import { useDispatch, useSelector } from '../../services/types/index';
 
 type TMainPartOfBurgerProps = {
   item: IIngredients,
@@ -22,6 +23,30 @@ type TDraggingElement = {
   id: string,
   index: number,
 }
+
+export interface IRemoveIngredient{
+  readonly type: typeof REMOVE_INGREDIENT,
+  key: string
+}
+
+export interface IIngredientCounterDecrease{
+  readonly type: typeof INGREDIENT_COUNTER_DECREASE,
+  id: string
+}
+
+export interface INewOrder{
+  readonly type: typeof NEW_ORDER,
+}
+
+export interface IClearCounter{
+  readonly type: typeof CLEAR_COUNTER,
+}
+
+export type TConstructorActions = 
+| IRemoveIngredient
+| IIngredientCounterDecrease
+| INewOrder
+| IClearCounter;
 
 const MainPartOfBurger = ({ item, index, id }: TMainPartOfBurgerProps) => {
   const dispatch = useDispatch();
@@ -65,7 +90,6 @@ const MainPartOfBurger = ({ item, index, id }: TMainPartOfBurgerProps) => {
         return
       }
       (item as TDraggingElement).index = hoverIndex
-      // @ts-ignore
       dispatch(moveCard(dragIndex, hoverIndex));
     },
   })
@@ -97,14 +121,11 @@ const MainPartOfBurger = ({ item, index, id }: TMainPartOfBurgerProps) => {
 }
 
 const OrderElement = () => {
-  // @ts-ignore
   const { ingredients } = useSelector(state => state.product);
-  // @ts-ignore
   const { buns } = useSelector(state => state.product);
-  // @ts-ignore
   const { isAuth } = useSelector(state => state.requests);
   const dispatch = useDispatch();
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState<boolean>(false);
   const location = useLocation();
   const history = useHistory()
 
@@ -121,7 +142,6 @@ const OrderElement = () => {
     const orderData = [...uniqueSet]
     orderData.push(bunsId)
     setActive(true)
-    // @ts-ignore
     dispatch(orderDetails(orderData));
   }
 
@@ -152,11 +172,8 @@ const OrderElement = () => {
 }
 
 const BurgerConstructor = () => {
-  // @ts-ignore
   const { ingredients } = useSelector(state => state.product);
-  // @ts-ignore
   const { buns } = useSelector(state => state.product);
-  // @ts-ignore
   const { orderNumber } = useSelector(state => state.order);
 
   const dispatch = useDispatch();
@@ -165,12 +182,11 @@ const BurgerConstructor = () => {
     accept: 'all',
     drop: (item: IIngredients) => {
       if (item.type === "bun") {
-        // @ts-ignore
         dispatch(addBun(item));
       } else {
-        dispatch(addIngredients({ ...item, key: uuidv4() }));
+        //@ts-ignore
+        dispatch(addIngredients({...item, key: uuidv4()}));
       }
-      // @ts-ignore
       dispatch(ingredientCounterIncrease(item._id, item.type))
     },
     collect: (monitor) => ({
@@ -198,7 +214,7 @@ const BurgerConstructor = () => {
         type: CLEAR_COUNTER,
       })
     }
-  }, [orderNumber])
+  }, [orderNumber, dispatch])
 
   return (
     <div className={styles.box} >

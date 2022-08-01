@@ -2,24 +2,31 @@ import {
     GETTING_ORDER_DETAILS,
     GET_ORDER_DETAILS_FAILED,
     GET_ORDER_DETAILS_SUCCESS,
-    CLOSE_ORDER_DETAILS
-} from "../actions/order-details"
+} from "../constants";
+import { TActions } from "../types";
+
+export type TInitialOrderState = {
+    orderNumber: number | null,
+    modalIsActive: boolean,
+    showOrderDetails: boolean,
+    customMessage: string,
+}
 
 const initialOrderState = {
     orderNumber: null,
+    modalIsActive: false,
     showOrderDetails: false,
-    customMessage:''
+    customMessage: '',
 }
 
-export const orderReducer = (state = initialOrderState, action) => {
+export const orderReducer = (state = initialOrderState, action: TActions): TInitialOrderState => {
     switch (action.type) {
         case GETTING_ORDER_DETAILS: {
             return {
                 ...state,
-                orderNumber: action.orderNumber,
                 modalIsActive: true,
                 showOrderDetails: false,
-                customMessage:'Ваш заказ обрабатывается...'
+                customMessage: 'Ваш заказ обрабатывается...'
             }
         }
         case GET_ORDER_DETAILS_FAILED: {
@@ -27,7 +34,7 @@ export const orderReducer = (state = initialOrderState, action) => {
                 ...state,
                 modalIsActive: true,
                 showOrderDetails: false,
-                customMessage:'Что-то пошло не так. Пожалуйста, повторите заказ'
+                customMessage: 'Что-то пошло не так. Пожалуйста, повторите заказ'
             }
         }
         case GET_ORDER_DETAILS_SUCCESS: {
@@ -36,13 +43,7 @@ export const orderReducer = (state = initialOrderState, action) => {
                 orderNumber: action.orderNumber,
                 modalIsActive: true,
                 showOrderDetails: true,
-                customMessage:''
-            }
-        }
-        case CLOSE_ORDER_DETAILS: {
-            return {
-                orderNumber: null,
-                showOrderDetails: false,
+                customMessage: ''
             }
         }
         default: {

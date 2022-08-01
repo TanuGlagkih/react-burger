@@ -14,25 +14,27 @@ import Modal from '../modal/modal';
 import { useDispatch } from 'react-redux';
 import { getItems } from '../../services/actions/burger-ingredients';
 import { Location } from 'history';
+import { FeedPage } from '../../pages/feed';
+import { FeedDetails } from '../../pages/feed-details';
+import { FeedDetailsPage } from '../../pages/feed-details-page';
 
 function App() {
   const dispatch = useDispatch();
   const [active, setActive] = useState<boolean>(false);
-  const location = useLocation<{background: Location}>();
-  
+  const location = useLocation<{ background: Location }>();
+
   useEffect(() => {
-    // @ts-ignore
-    dispatch(getItems()) 
-    }, [])
+    dispatch(getItems())
+  }, [])
 
   const background = location.state && location.state.background;
 
-  useEffect(()=>{
-   if(location.state && location.state.background){
-    setActive(true)
-      }
-}, [background])
- 
+  useEffect(() => {
+    if (location.state && location.state.background) {
+      setActive(true)
+    }
+  }, [background])
+
   return (
     <>
       <AppHeader />
@@ -53,7 +55,13 @@ function App() {
           <ProfilePage />
         </ProtectedRoute>
         <Route path='/ingredients/:id'>
-          <IngredientDetails modal={false}/>
+          <IngredientDetails modal={false} />
+        </Route>
+        <Route path='/feed/:id'>
+          <FeedDetailsPage modal={false} />
+        </Route>
+        <Route path='/feed' >
+          <FeedPage />
         </Route>
         <Route path='/' exact={true}>
           <HomePage />
@@ -63,10 +71,20 @@ function App() {
         </Route>
       </Switch>
       {background && <Route path="/ingredients/:id" >
-       <Modal active={active} setActive={setActive} back={true}> 
-        <IngredientDetails modal={true}/>
-      </Modal> 
+        <Modal active={active} setActive={setActive} back={true}>
+          <IngredientDetails modal={true} />
+        </Modal>
       </Route>}
+      {background && <Route path="/feed/:id" >
+        <Modal active={active} setActive={setActive} back={true}>
+          <FeedDetails modal={true} orderProps={null} />
+        </Modal>
+      </Route>}
+      {background && <ProtectedRoute path="/profile/orders/:id" >
+        <Modal active={active} setActive={setActive} back={true}>
+          <FeedDetails modal={true} orderProps={null}/>
+        </Modal>
+      </ProtectedRoute>}
     </>
   );
 }
