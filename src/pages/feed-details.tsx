@@ -10,12 +10,11 @@ export const FeedDetails = ({ modal, orderProps }: TIngredientDetailsProps) => {
     const location = useLocation();
     const { id } = useParams<{ id?: any }>();
     const { items } = useSelector(state => state.burger);
-    var { authMessages, messages } = useSelector(state => state.allSocket);
+    var { messages } = useSelector(state => state.allSocket);
 
-    var orders = location.pathname === `/profile/orders/${id}` ?
-        authMessages?.orders
-        :
-        messages?.orders
+    var orders = messages?.orders
+    //`/profile/orders/${id}` ?
+
 
     var order = orderProps ? orderProps
         :

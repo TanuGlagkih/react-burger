@@ -82,11 +82,8 @@ export const FeedItem = ({ order, id }: IFeedIteem) => {
 export const Feed = () => {
     const location = useLocation();
 
-    const { authMessages, messages } = useSelector(state => state.allSocket)
-    var orders = location.pathname === '/profile/orders' ?
-        authMessages?.orders
-        :
-        messages?.orders
+    const { messages } = useSelector(state => state.allSocket)
+    var orders = messages?.orders
 
     if (location.pathname === '/profile/orders' && orders) {
         orders = [...orders].reverse()

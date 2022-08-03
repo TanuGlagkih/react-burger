@@ -6,13 +6,7 @@ import {
     WS_CONNECTION_START,
     WS_CONNECTION_SUCCESS,
     WS_GET_MESSAGE,
-    WS_CONNECTION_CLOSED_PROTECTED,
-    WS_CONNECTION_ERROR_PROTECTED,
-    WS_CONNECTION_START_PROTECTED,
-    WS_CONNECTION_SUCCESS_PROTECTED,
-    WS_GET_MESSAGE_PROTECTED,
     WS_DISCONNECT,
-    WS_DISCONNECT_PROTECTED,
 } from '../constants/wsActionTypes';
 import type { AppDispatch, RootState } from '../types';
 import { getCookie } from '../utils';
@@ -39,38 +33,11 @@ export interface IwsConnectionClose {
 
 export interface IwsConnectionStart {
     readonly type: typeof WS_CONNECTION_START;
-}
-
-export interface IwsAuthConnectionSuccess {
-    readonly type: typeof WS_CONNECTION_SUCCESS_PROTECTED;
-    payload: Event;
-}
-
-export interface IwsAuthConnectionError {
-    readonly type: typeof WS_CONNECTION_ERROR_PROTECTED;
-    payload: Event;
-}
-
-export interface IwsAuthGetMessage {
-    readonly type: typeof WS_GET_MESSAGE_PROTECTED;
-    payload: TwsMessage;
-}
-
-export interface IwsAuthConnectionClose {
-    readonly type: typeof WS_CONNECTION_CLOSED_PROTECTED;
-    payload?: Event;
-}
-
-export interface IwsAuthConnectionStart {
-    readonly type: typeof WS_CONNECTION_START_PROTECTED;
+    protected: boolean;
 }
 
 export interface IwsDisconnect {
     readonly type: typeof WS_DISCONNECT;
-}
-
-export interface IwsAuthDisconnect {
-    readonly type: typeof WS_DISCONNECT_PROTECTED;
 }
 
 export type TSoketMiddleware =
@@ -79,35 +46,45 @@ export type TSoketMiddleware =
     | IwsGetMessage
     | IwsConnectionClose
     | IwsConnectionStart
-    | IwsAuthConnectionSuccess
-    | IwsAuthConnectionError
-    | IwsAuthGetMessage
-    | IwsAuthConnectionClose
-    | IwsAuthConnectionStart
     | IwsDisconnect
-    | IwsAuthDisconnect
 
 export const socketMiddleware = (): Middleware => {
     return ((store: MiddlewareAPI<AppDispatch, RootState>) => {
         let socket: WebSocket | null = null;
-        let socketForAuthUser: WebSocket | null = null;
+        let isConnected: boolean;
+        let reconnectTimer = 0;
+        let url: string | URL;
+        const accessToken = getCookie('accessToken');
+        let isProtected = false;
 
         return next => action => {
             const { dispatch, getState } = store;
             const { type, payload } = action;
 
-
             if (type === 'WS_CONNECTION_START') {
-                socket = new WebSocket('wss://norma.nomoreparties.space/orders/all');
+                isProtected = action.protected
+                url = isProtected ?
+                    `wss://norma.nomoreparties.space/orders?token=${accessToken}`
+                    :
+                    'wss://norma.nomoreparties.space/orders/all'
+
+                socket = new WebSocket(url);
             }
 
             if (socket) {
                 socket.onopen = event => {
+                    isConnected = true;
                     dispatch({ type: 'WS_CONNECTION_SUCCESS', payload: event });
                 };
                 socket.onerror = event => {
                     console.log('error');
                     dispatch({ type: 'WS_CONNECTION_ERROR', payload: event });
+
+                    if (isConnected) {
+                        reconnectTimer = window.setTimeout(() =>
+                            dispatch({ type: 'WS_CONNECTION_START', protected: isProtected }),
+                            3000);
+                    }
                 };
                 socket.onmessage = event => {
                     const { data } = event;
@@ -116,39 +93,16 @@ export const socketMiddleware = (): Middleware => {
                 };
                 socket.onclose = event => {
                     dispatch({ type: 'WS_CONNECTION_CLOSED', payload: event });
-                    console.log('closed')
+                    isConnected = false;
+                    console.log('closed');
                 };
                 if (type === 'WS_DISCONNECT') {
                     socket.close()
                     socket = null;
-                }
-            }
-
-            if (type === 'WS_CONNECTION_START_PROTECTED') {
-                const accessToken = getCookie('accessToken')
-                socketForAuthUser = new WebSocket(`wss://norma.nomoreparties.space/orders?token=${accessToken}`);
-            }
-
-            if (socketForAuthUser) {
-                socketForAuthUser.onopen = event => {
-                    dispatch({ type: 'WS_CONNECTION_SUCCESS_PROTECTED', payload: event });
-                };
-                socketForAuthUser.onerror = event => {
-                    console.log('error');
-                    dispatch({ type: 'WS_CONNECTION_ERROR_PROTECTED', payload: event });
-                };
-                socketForAuthUser.onmessage = event => {
-                    const { data } = event;
-                    const parsedData = JSON.parse(data);
-                    dispatch({ type: 'WS_GET_MESSAGE_PROTECTED', payload: parsedData });
-                };
-                socketForAuthUser.onclose = event => {
-                    dispatch({ type: 'WS_CONNECTION_CLOSED_PROTECTED', payload: event });
-                    console.log('closed')
-                };
-                if (type === 'WS_DISCONNECT_PROTECTED') {
-                    socketForAuthUser.close()
-                    socket = null;
+                    isConnected = false;
+                    reconnectTimer = 0;
+                    url = '';
+                    isProtected = false
                 }
             }
             next(action);
