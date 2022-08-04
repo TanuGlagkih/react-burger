@@ -4,8 +4,8 @@
 <ul>
 <li>Конструктор бургера, перетаскивание начинок (библиотека drag&drop)<br><br>
  
-<img height="240" alt="2" src="https://user-images.githubusercontent.com/96661925/182873689-db560ff5-9c0c-4e00-82af-47c743126235.png">
-<img height="240" alt="6" src="https://user-images.githubusercontent.com/96661925/182873767-70ca8d82-22d2-4d93-b8a8-54e46a597d46.png">
+<img width="500" alt="2" src="https://user-images.githubusercontent.com/96661925/182873689-db560ff5-9c0c-4e00-82af-47c743126235.png"><br>
+<img width="500" alt="6" src="https://user-images.githubusercontent.com/96661925/182873767-70ca8d82-22d2-4d93-b8a8-54e46a597d46.png">
 
 <li>Отправка заказа на сервер (доступно только авторизованным пользователям)<br><br>
  <img width="500" alt="5" src="https://user-images.githubusercontent.com/96661925/182873807-4aad3754-d64a-447c-9570-8bc4b89166ff.png">
@@ -23,6 +23,9 @@
 UI-компоненты взяты из библиотеки
 React Developer Burger UI Components
  `@ya.praktikum/react-developer-burger-ui-components`
+ 
+ ### Инструкции по установке
+ 
 
 # Stellar Burger 
 
