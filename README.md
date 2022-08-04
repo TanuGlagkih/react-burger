@@ -1,3 +1,24 @@
+
+# Stellar Burger 
+
+## A multi-page application includes:
+<ul>
+<li>Registration/login/password recovery using tokens (React Router v5) <br>
+<li>Burger constructor, dragging fillings (drag&drop library) <br>
+<li>Sending an order to the server (available only to authorized users) <br>
+<li>Viewing the current order feed (WebSocket) 
+</ul>
+
+ ## Technology stack: 
+ React, Redux, Typescript  <br>
+UI components are taken from the library
+React Developer Burger UI Components
+ `@ya.praktikum/react-developer-burger-ui-components`
+ 
+## Installation
+1. Clone this repo
+2. Run `npm install && npm start` 
+<br><br>
 # Бургерная на краю Вселенной
 
 Многостраничное приложение бургерной "Stellar Burger" с возможностью сделать заказ
@@ -28,24 +49,4 @@ React Developer Burger UI Components
  ## Установка
 1. Необходимо клонировать этот репозиторий
 2. Выполнить `npm install && npm start`
- <br><br>
-# Stellar Burger 
-
-## A multi-page application includes:
-<ul>
-<li>Registration/login/password recovery using tokens (React Router v5) <br>
-<li>Burger constructor, dragging fillings (drag&drop library) <br>
-<li>Sending an order to the server (available only to authorized users) <br>
-<li>Viewing the current order feed (WebSocket) 
-</ul>
-
- ## Technology stack: 
- React, Redux, Typescript  <br>
-UI components are taken from the library
-React Developer Burger UI Components
- `@ya.praktikum/react-developer-burger-ui-components`
  
-## Installation
-1. Clone this repo
-2. Run `npm install && npm start` 
-
