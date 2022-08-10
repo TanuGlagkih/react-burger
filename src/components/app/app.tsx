@@ -71,8 +71,8 @@ function App() {
         </Route>
       </Switch>
       {background && <Route path="/ingredients/:id" >
-        <Modal active={active} setActive={setActive} back={true}>
-          <IngredientDetails modal={true} />
+        <Modal active={active} setActive={setActive} back={true} dataTestId='overlay'>
+          <IngredientDetails modal={true} dataTestId='ingredient'/>
         </Modal>
       </Route>}
       {background && <Route path="/feed/:id" >

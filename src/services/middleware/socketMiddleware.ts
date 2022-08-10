@@ -13,7 +13,7 @@ import { getCookie } from '../utils';
 
 export interface IwsConnectionSuccess {
     readonly type: typeof WS_CONNECTION_SUCCESS;
-    payload: Event;
+    payload?: Event;
 }
 
 export interface IwsConnectionError {

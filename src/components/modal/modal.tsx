@@ -10,15 +10,16 @@ import { useHistory } from 'react-router-dom';
 const modalRoot = document.getElementById('react-modals')!
 
 interface IModal {
-    active: boolean, 
-    setActive: (active: boolean)=> void, 
-    children?: JSX.Element, 
+    active: boolean,
+    setActive: (active: boolean) => void,
+    children?: JSX.Element,
     back?: boolean,
+    dataTestId?: string,
 }
 
-const Modal = ({ active, setActive, children, back }: IModal) => {
+const Modal = ({ active, setActive, children, back, dataTestId }: IModal) => {
     const history = useHistory();
-    
+
     const handleClose = () => {
         setActive(false)
         if (back) {
@@ -36,12 +37,12 @@ const Modal = ({ active, setActive, children, back }: IModal) => {
     }, [setActive])
 
     return ReactDOM.createPortal(
-        <div className={active ? styles.containerActive : styles.container}>
-            <ModalOverlay active={active} setActive={setActive}  back={back}/>
+        <div className={active ? styles.containerActive : styles.container} data-testid = {dataTestId}>
+            <ModalOverlay active={active} setActive={setActive} back={back} />
             <div className={styles.modal}>
                 {children}
-                <div className={styles.close}>
-                    <CloseIcon type="primary" onClick={handleClose} />
+                <div className={styles.close} data-testid='closeIcon'>
+                    <CloseIcon type="primary" onClick={handleClose}/>
                 </div>
             </div>
         </div>

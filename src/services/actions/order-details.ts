@@ -8,6 +8,48 @@ import {
 import { AppThunk } from '../types'
 import { getCookie } from "../utils";
 
+export const orderDetails = (orderData: ReadonlyArray<string>): AppThunk => (dispatch) => {
+    dispatch(orderDetailsRequest());
+
+  return fetch(`${baseUrl}/orders`, {
+        method: 'post',
+        headers: {
+            "Content-Type": "application/json;charset=utf-8",
+            Authorization: 'Bearer ' + getCookie('accessToken')
+        },
+        body: JSON.stringify({
+            ingredients: orderData,
+        }),
+    })
+        .then((res) => checkResponse<IOrderDetailsResponce>(res))
+        .then((res) => {
+            if (res && res.success) {
+                const orderNumber = res.order.number;
+                dispatch(orderRequestSuccess(orderNumber))
+            } else {
+                dispatch(orderRequestFailed())
+            }
+        }).catch(err => dispatch(orderRequestFailed()))
+}
+
+const orderDetailsRequest = (): IGetOrderDetails => {
+    return {
+        type: GETTING_ORDER_DETAILS,
+    }
+}
+const orderRequestSuccess = (orderNumber: number): IGetOrderDetailsSuccess => {
+    return {
+        type: GET_ORDER_DETAILS_SUCCESS,
+        orderNumber: orderNumber
+    }
+}
+
+const orderRequestFailed = (): IOrderRequestFailed => {
+    return {
+        type: GET_ORDER_DETAILS_FAILED,
+    }
+}
+
 export interface IGetOrderDetails {
     readonly type: typeof GETTING_ORDER_DETAILS
 }
@@ -25,36 +67,5 @@ export type TOrderDetailsActions =
     | IGetOrderDetails
     | IGetOrderDetailsSuccess
     | IOrderRequestFailed
- 
-export const orderDetails = (orderData: ReadonlyArray<string>): AppThunk => (dispatch) => {
-        dispatch({
-            type: GETTING_ORDER_DETAILS,
-        });
-        fetch(`${baseUrl}/orders`, {
-            method: 'post',
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-                Authorization: 'Bearer ' + getCookie('accessToken')
-            },
-            body: JSON.stringify({
-                ingredients: orderData,
-            }),
-        })
-            .then(checkResponse<IOrderDetailsResponce>)
-            .then((res) => {
-                if (res && res.success) {
-                    dispatch({
-                        type: GET_ORDER_DETAILS_SUCCESS,
-                        orderNumber: res.order.number,
-                    })
-                } else {
-                    orderRequestFailed()
-                }
-            }).catch(err => orderRequestFailed())
-    }
 
-const orderRequestFailed = (): IOrderRequestFailed => {
-    return {
-        type: GET_ORDER_DETAILS_FAILED,
-    }
-}
+

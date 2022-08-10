@@ -9,6 +9,29 @@ import {
 } from "../constants";
 import { AppThunk } from "../types";
 
+
+export const getItems = (): AppThunk => (dispatch) => {
+    dispatch(ingredientRequest());
+    return fetch(`${baseUrl}/ingredients`)
+        .then((res) => checkResponse<TDataResponce>(res))
+        .then((res) => {
+            if (res && res.success) {
+                const data = res.data;
+                dispatch(ingredientRequestSuccess(data))
+            } else {
+                dispatch(ingredientRequestFailed())
+            }
+        }).catch(err => dispatch(ingredientRequestFailed()))
+}
+
+export const ingredientCounterIncrease = (itemId: string, itemType: string): AppThunk => (dispatch) => {
+    itemType === 'bun'
+        ?
+        dispatch(increaseBun(itemId))
+        :
+        dispatch(increaseIngredient(itemId))
+}
+
 export interface IIngredientsRequest {
     readonly type: typeof BURGER_INGREDIENTS_REQUEST
 }
@@ -39,43 +62,38 @@ export type TBurgerIngredientsActions =
     | IBunIncreaser
     | IIngredientsIncreaser
 
-
-export const getItems = (): AppThunk => (dispatch) => {
-    dispatch({
+export function ingredientRequest(): IIngredientsRequest {
+    return {
         type: BURGER_INGREDIENTS_REQUEST,
-    });
-    fetch(`${baseUrl}/ingredients`)
-        .then(checkResponse<TDataResponce>)
-        .then((res) => {
-            if (res && res.success) {
-                dispatch({
-                    type: BURGER_INGREDIENTS_REQUEST_SUCCESS,
-                    data: res.data,
-                })
-
-            } else {
-                dispatch(ingredientRequestFailed())
-            }
-        }).catch(err => dispatch(ingredientRequestFailed()))
+    }
 }
 
-const ingredientRequestFailed = (): IIngredientRequestFailed => {
+export function ingredientRequestSuccess(data: Array<IIngredients>): IIngredientsRequestSuccess {
+    return {
+        type: BURGER_INGREDIENTS_REQUEST_SUCCESS,
+        data: data,
+    }
+}
+
+export function ingredientRequestFailed(): IIngredientRequestFailed {
     return {
         type: BURGER_INGREDIENTS_REQUEST_FAILED,
     }
 }
-export const ingredientCounterIncrease = (itemId: string, itemType: string): AppThunk=> (dispatch)=>{
-        itemType === 'bun'
-            ?
-            dispatch({
-                type: BUN_INCREASER,
-                id: itemId
-            })
-            :
-            dispatch({
-                type: OTHER_INGREDIENTS_INCREASER,
-                id: itemId
-            })
+
+export function increaseBun(itemId: string): IBunIncreaser {
+    return {
+        type: BUN_INCREASER,
+        id: itemId
     }
+}
+
+export function increaseIngredient(itemId: string): IIngredientsIncreaser {
+    return {
+        type: OTHER_INGREDIENTS_INCREASER,
+        id: itemId
+    }
+}
+
 
 

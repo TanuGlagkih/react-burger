@@ -164,7 +164,7 @@ const OrderElement = () => {
           Оформить заказ
         </Button>
       </div>
-      <Modal active={active} setActive={setActive}>
+      <Modal active={active} setActive={setActive} dataTestId='orderOverlay'>
         <OrderDetails />
       </Modal>
     </>
@@ -217,8 +217,8 @@ const BurgerConstructor = () => {
   }, [orderNumber, dispatch])
 
   return (
-    <div className={styles.box} >
-      <div className={styles.items} ref={drop} style={{ ...styles, opacity, border }}>
+    <div className={styles.box}>
+      <div className={styles.items} ref={drop} style={{ ...styles, opacity, border }} id='dropContainer' >
         <div className={styles.bottom}>
           {(!buns) ? (
             <div className={styles.pos_top}>

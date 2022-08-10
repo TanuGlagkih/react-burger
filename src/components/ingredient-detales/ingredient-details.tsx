@@ -5,13 +5,13 @@ import { IIngredients } from '../../utils/types'
 import { TIngredientDetailsProps } from '../../utils/types'
 import { useSelector } from '../../services/types';
 
-const IngredientDetails = ({ modal }: TIngredientDetailsProps) => {
+const IngredientDetails = ({ modal, dataTestId }: TIngredientDetailsProps) => {
     const { id } = useParams<{id?: string}>();
     const { items } = useSelector(state => state.burger);
     const item = items.find((item: IIngredients) => item._id == `${id}`);
 
     return (
-        <div className={modal ? styles.boxActive : styles.box}>
+        <div className={modal ? styles.boxActive : styles.box} data-testid={dataTestId}>
             {item ? (
                 <>
                     {modal ? <h1 className={`text text_type_main-medium ${styles.h}`}>Детали ингредиента</h1>

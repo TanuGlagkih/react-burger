@@ -66,8 +66,9 @@ const Item = ({ item }: IItemProps) => {
           state: { background: location }
         }}
         className={styles.link}
+        ref={ref} 
       >
-        <li className={styles.li} key={item._id} ref={ref} style={{ opacity }}>
+        <li className={styles.li} key={item._id} style={{ opacity }}>
           <img src={item.image} className={styles.img}></img>
           {item.__v !== 0 &&
             <Counter count={item.__v} size="default" />}
