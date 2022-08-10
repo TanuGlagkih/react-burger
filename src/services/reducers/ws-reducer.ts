@@ -48,7 +48,7 @@ export const wsReducer = (state = initialState, action: TActions): TwsState => {
         case WS_GET_MESSAGE: {
             return {
                 ...state,
-                messages: [action.payload].at(-1)!,
+                messages: action.payload,
                 error: undefined,
             }
         };
