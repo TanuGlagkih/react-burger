@@ -17,7 +17,8 @@ export interface IIngredients {
 
 export type TIngredientDetailsProps = {
     modal?: boolean,
-    orderProps?: TOrderItem | null
+    orderProps?: TOrderItem | null,
+    dataTestId?: string
 };
 
 export interface IFormState {

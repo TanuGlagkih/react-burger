@@ -6,9 +6,11 @@ import { useEffect } from "react";
 
 export const FeedPage = () => {
     const dispatch = useDispatch();
-
     useEffect(() => {
-        dispatch({ type: 'WS_CONNECTION_START' });
+        dispatch({
+            type: 'WS_CONNECTION_START',
+            protected: false
+        });
         return () => {
             dispatch({ type: 'WS_DISCONNECT' })
         }

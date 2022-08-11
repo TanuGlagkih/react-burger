@@ -7,7 +7,7 @@
 
 # testing
 /coverage
-/src/tests
+/src/my_tests 
 /src/services/requests.js
 /src/services/fetchWithRefresh.js
 

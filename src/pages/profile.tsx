@@ -14,9 +14,12 @@ export function ProfilePage() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch({ type: 'WS_CONNECTION_START_PROTECTED' })
+        dispatch({
+            type: 'WS_CONNECTION_START',
+            protected: true
+        })
         return () => {
-            dispatch({ type: 'WS_DISCONNECT_PROTECTED' })
+            dispatch({ type: 'WS_DISCONNECT' })
         }
     }, [])
 
