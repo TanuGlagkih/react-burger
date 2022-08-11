@@ -17,9 +17,7 @@ describe('Action creators', () => {
         }
         expect(actions.addIngredients(item, key)).toEqual(expectedAction)
     })
-})
 
-describe('Action creators with middleware', () => {
     it('should create an action with an item', () => {
         const store = mockStore({})
         const item = { key: 'value' };
@@ -30,9 +28,7 @@ describe('Action creators with middleware', () => {
         store.dispatch(actions.addBun(item));
         expect(store.getActions()).toEqual(expectedAction);
     })
-})
 
-describe('Action creators', () => {
     it('should create an action with correct drag-and-hover index', () => {
         const dragIndex = 123;
         const hoverIndex = 456
