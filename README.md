@@ -2,7 +2,7 @@
 # Stellar Burger 
 Link: https://react-burger-tawny.vercel.app/ 
 
-## A multi-page application includes:
+## Web-application includes:
 <ul>
 <li>Registration/login/password recovery using tokens (React Router v5) <br>
 <li>Burger constructor, dragging fillings (drag&drop library) <br>
@@ -23,7 +23,7 @@ React Developer Burger UI Components
 # Бургерная на краю Вселенной
 Ссылка: https://react-burger-tawny.vercel.app/ 
 
-Многостраничное приложение бургерной "Stellar Burger" с возможностью сделать заказ
+Веб-приложение бургерной "Stellar Burger" с возможностью сделать заказ
 
 ## Функционал
 
